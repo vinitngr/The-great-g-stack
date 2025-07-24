@@ -4,13 +4,14 @@
   "description": "A powerful CLI tool to scaffold and export stack setups quickly.",
   "author": "Vinit Nagar",
   "private": true,
-  "workspaces": ["packages/*", "apps/*"],
+  "workspaces": ["packages/*" , "apps/*"],
   "packageManager": "npm@10.9.0",
   "devDependencies": {
     "turbo": "latest"
   },
   "scripts": {
     "dev": "turbo run dev",
-    "build": "turbo run build"
+    "build": "turbo run build",
+    "export": "turbo run export"
   }
 }

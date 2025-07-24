@@ -9,7 +9,8 @@
     "tggs": "./cli.js"
   },
   "scripts": {
-    "dev": "node cli.js",
+    "import": "node cli.js https://tggs.vinitnagar56.workers.dev/api/stack/e427a421d151 --dir ../../testspace",
+    "export": "node cli.js export --dir ../../testspace",
     "lint": "eslint .",
     "test": "vitest"
   },
