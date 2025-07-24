@@ -6,7 +6,6 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 import { globby } from "globby";
-import FormData from "form-data";
 import pc from "picocolors";
 import ora from "ora";
 import enquirer from "enquirer";
@@ -17,9 +16,15 @@ const cli = meow(
   `
   Usage:
     $ tggs <url> --dir=target-directory
+    $ tggs export --dir=target-directory
 
   Options:
     --dir, -d  Directory to extract files into [default: current directory]
+
+  Examples:
+    $ tggs https://tggs.vinitnagar56.workers.dev/api/stack/e427a421d151 --dir=./my-stack
+    $ tggs export --dir=./my-stack
+    
 `,
   {
     importMeta: import.meta,

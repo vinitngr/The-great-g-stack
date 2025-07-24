@@ -5,6 +5,6 @@
     },
     "build": {},
     "lint": {},
-    "export": {}
+    "import": {}
   }
 }

@@ -12,6 +12,6 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "export": "turbo run export"
+    "import": "turbo run import"
   }
 }

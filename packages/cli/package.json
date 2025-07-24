@@ -1,6 +1,6 @@
 {
   "name": "@theggs/cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A powerful CLI tool to scaffold and export stack setups quickly.",
   "author": "Vinit Nagar",
   "license": "ISC",
@@ -40,7 +40,6 @@
   ],
   "dependencies": {
     "enquirer": "^2.4.1",
-    "form-data": "^4.0.4",
     "globby": "^14.1.0",
     "meow": "^13.1.0",
     "node-fetch": "^3.3.2",
