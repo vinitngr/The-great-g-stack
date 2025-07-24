@@ -1,7 +1,11 @@
 {
-  "name": "your-monorepo",
+  "name": "the-great-goat-stack",
+  "version": "1.0.0",
+  "description": "A powerful CLI tool to scaffold and export stack setups quickly.",
+  "author": "Vinit Nagar",
   "private": true,
-  "workspaces": ["packages/*"],
+  "workspaces": ["packages/*", "apps/*"],
+  "packageManager": "npm@10.9.0",
   "devDependencies": {
     "turbo": "latest"
   },
