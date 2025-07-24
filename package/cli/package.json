@@ -1,0 +1,49 @@
+{
+  "name": "@theggs/cli",
+  "version": "1.0.0",
+  "description": "A powerful CLI tool to scaffold and export stack setups quickly.",
+  "author": "Vinit Nagar",
+  "license": "ISC",
+  "type": "module",
+  "bin": {
+    "tggs": "./cli.js"
+  },
+  "scripts": {
+    "dev": "node cli.js",
+    "lint": "eslint .",
+    "test": "vitest"
+  },
+  "files": [
+    "cli.js",
+    "README.md",
+    ".gitignore"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vinitngr/the-great-g-stack"
+  },
+  "homepage": "https://github.com/vinitngr/the-great-g-stack#readme",
+  "bugs": {
+    "url": "https://github.com/vinitngr/the-great-g-stack/issues"
+  },
+  "keywords": [
+    "cli",
+    "stack",
+    "scaffold",
+    "tooling",
+    "starter",
+    "project-generator"
+  ],
+  "dependencies": {
+    "enquirer": "^2.4.1",
+    "form-data": "^4.0.4",
+    "globby": "^14.1.0",
+    "meow": "^13.1.0",
+    "node-fetch": "^3.3.2",
+    "ora": "^8.2.0",
+    "picocolors": "^1.1.1"
+  }
+}
