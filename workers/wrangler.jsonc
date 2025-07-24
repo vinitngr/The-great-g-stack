@@ -1,0 +1,14 @@
+{
+  "name": "tggs",
+  "main": "src/index.js",
+  "compatibility_date": "2025-07-24",
+  "observability": {
+    "enabled": true
+  },
+  "kv_namespaces": [
+    {
+      "binding": "TGGS_KV",
+      "id": "723d220b491741c8a707719abd33edec"
+    }
+  ]
+}

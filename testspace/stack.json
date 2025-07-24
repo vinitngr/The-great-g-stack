@@ -1,0 +1,273 @@
+{
+  "stack": {
+    "full-stack": {
+      "options": [
+        {
+          "name": "MERN",
+          "description": "MongoDB, Express.js, React, Node.js. [6, 9]",
+          "dependencies": {
+            "frontend": ["React"],
+            "backend": ["Node.js", "Express.js"],
+            "database": ["MongoDB"]
+          }
+        },
+        {
+          "name": "Next.js Full-Stack",
+          "description": "A React framework for production with features like server-side rendering and static site generation. [1]",
+          "dependencies": {
+            "frontend": ["React", "Next.js"],
+            "backend": ["Node.js"],
+            "database": ["PostgreSQL", "MongoDB", "MySQL", "SQLite"]
+          }
+        }
+      ]
+    },
+    "backend": {
+      "options": [
+        {
+          "name": "Node.js",
+          "description": "A JavaScript runtime built on Chrome's V8 JavaScript engine, popular for its speed and efficiency. [16]",
+          "frameworks": [
+            {
+              "name": "Express.js",
+              "description": "A minimal and flexible Node.js web application framework. [23, 25, 41]"
+            },
+            {
+              "name": "Nest.js",
+              "description": "A progressive Node.js framework for building efficient, reliable and scalable server-side applications. [16]"
+            },
+            {
+              "name": "Koa.js",
+              "description": "A new web framework designed by the team behind Express. [16, 23]"
+            },
+            {
+              "name": "Fastify",
+              "description": "A fast and low overhead web framework, for Node.js. [41]"
+            },
+            {
+              "name": "Adonis.js",
+              "description": "A full-featured MVC framework for Node.js. [23, 25]"
+            }
+          ]
+        }
+      ]
+    },
+    "frontend": {
+      "options": [
+        {
+          "name": "React",
+          "description": "A JavaScript library for building user interfaces. [19, 38, 42]",
+          "frameworks": [
+            {
+              "name": "Next.js",
+              "description": "The React Framework for Production. [1]"
+            },
+            {
+              "name": "Gatsby",
+              "description": "A React-based open-source framework for creating fast websites and apps. [19]"
+            },
+            {
+              "name": "Remix",
+              "description": "A full stack web framework that lets you focus on the user interface. [42]"
+            },
+            {
+              "name": "Vite",
+              "description": "A build tool that aims to provide a faster and leaner development experience for modern web projects. [1, 38]"
+            }
+          ]
+        }
+      ]
+    },
+    "backend-frontend": {
+      "options": [
+        {
+          "name": "Next.js + Backend Framework",
+          "description": "Using Next.js for the frontend and a separate backend framework.",
+          "dependencies": {
+            "frontend": ["React", "Next.js"],
+            "backend": ["Node.js", "Express.js", "Nest.js", "Koa.js", "Fastify"]
+          }
+        }
+      ]
+    },
+    "turborepo": {
+      "options": [
+        {
+          "name": "Turborepo",
+          "description": "A high-performance build system for JavaScript and TypeScript monorepos. [12, 33, 45, 49]",
+          "tools": ["Lerna", "Nx", "Rush", "Pants", "Bazel"]
+        }
+      ]
+    }
+  },
+  "runtime": {
+    "options": [
+      {
+        "name": "bun",
+        "description": "A fast all-in-one JavaScript runtime. [14, 28, 39, 44, 46]"
+      },
+      {
+        "name": "deno",
+        "description": "A secure runtime for JavaScript and TypeScript. [14, 28, 39]"
+      },
+      {
+        "name": "node",
+        "description": "A JavaScript runtime built on Chrome's V8 JavaScript engine. [14, 28, 39]"
+      }
+    ]
+  },
+  "packageManager": {
+    "options": ["npm", "pnpm", "yarn"]
+  },
+  "database": {
+    "backend": {
+      "options": [
+        {
+          "name": "MongoDB",
+          "description": "A NoSQL document-oriented database. [3, 6, 27, 31, 34, 43]"
+        },
+        {
+          "name": "PostgreSQL",
+          "description": "A powerful, open-source object-relational database system. [3, 6, 18, 31, 43]"
+        },
+        {
+          "name": "MySQL",
+          "description": "A popular open-source relational database management system. [3, 18, 27, 31]"
+        },
+        {
+          "name": "SQLite",
+          "description": "A C-language library that implements a small, fast, self-contained, high-reliability, full-featured, SQL database engine. [18, 31, 43]"
+        },
+        {
+          "name": "Redis",
+          "description": "An in-memory data structure store, used as a database, cache, and message broker. [3, 43]"
+        },
+        {
+          "name": "Cassandra",
+          "description": "A free and open-source, distributed, wide-column store, NoSQL database management system. [18]"
+        }
+      ]
+    },
+    "frontend": {
+      "options": [
+        {
+          "name": "Firebase Realtime Database",
+          "description": "A cloud-hosted NoSQL database that lets you store and sync data between your users in realtime. [3]"
+        },
+        {
+            "name": "RxDB",
+            "description": "A reactive database for JavaScript applications. [26, 32]"
+        }
+      ]
+    }
+  },
+  "authentication": {
+    "frontend": {
+      "options": [
+        {
+          "name": "Clerk",
+          "description": "A complete user management solution for your React and Next.js applications."
+        },
+        {
+          "name": "Auth0",
+          "description": "A flexible, drop-in solution to add authentication and authorization services to your applications. [7, 20, 30]"
+        },
+        {
+          "name": "Firebase Auth",
+          "description": "Provides backend services, easy-to-use SDKs, and ready-made UI libraries to authenticate users to your app. [15]"
+        },
+        {
+          "name": "React Auth Kit",
+          "description": "A lightweight auth state management library for React. [22]"
+        },
+        {
+          "name": "ProperAuth",
+          "description": "A flexible and easy-to-use authentication library. [7]"
+        }
+      ]
+    },
+    "backend": {
+      "options": [
+        {
+          "name": "Passport.js",
+          "description": "Authentication middleware for Node.js. [29, 36, 47]"
+        },
+        {
+          "name": "Permit",
+          "description": "An unopinionated authentication library for building Node.js APIs. [11, 29]"
+        },
+        {
+            "name": "google-auth-library",
+            "description": "Google's officially supported Node.js client library for using OAuth 2.0. [48]"
+        }
+      ]
+    }
+  },
+  "language": {
+    "options": ["JavaScript", "TypeScript"]
+  },
+  "testing": {
+    "frontend": {
+      "options": [
+        {
+          "name": "Jest",
+          "description": "A delightful JavaScript Testing Framework with a focus on simplicity. [2, 5, 8, 17, 21]"
+        },
+        {
+          "name": "React Testing Library",
+          "description": "A very light-weight solution for testing React components. [2, 21]"
+        },
+        {
+          "name": "Cypress",
+          "description": "A next generation front end testing tool built for the modern web. [2, 5, 8]"
+        },
+        {
+            "name": "Mocha",
+            "description": "A feature-rich JavaScript test framework running on Node.js and in the browser. [2, 5, 8, 17, 21]"
+        },
+        {
+            "name": "Enzyme",
+            "description": "A JavaScript Testing utility for React that makes it easier to test your React Components' output. [2, 8, 17, 21]"
+        },
+        {
+            "name": "Jasmine",
+            "description": "A behavior-driven development framework for testing JavaScript code. [2, 5, 8, 13]"
+        }
+      ]
+    },
+    "backend": {
+      "options": [
+        {
+          "name": "Jest",
+          "description": "A delightful JavaScript Testing Framework with a focus on simplicity. [4, 9, 10, 13, 24]"
+        },
+        {
+          "name": "Mocha",
+          "description": "A feature-rich JavaScript test framework running on Node.js and in the browser. [4, 9, 10, 13]"
+        },
+        {
+          "name": "Supertest",
+          "description": "A library for testing Node.js http servers."
+        },
+        {
+            "name": "Jasmine",
+            "description": "A behavior-driven development framework for testing JavaScript code. [4, 13]"
+        },
+        {
+            "name": "Ava",
+            "description": "A test runner for Node.js with a concise API, detailed error output, and process isolation. [13, 24]"
+        }
+      ]
+    }
+  },
+  "developerTools": {
+    "options": [
+      "ESLint",
+      "Prettier",
+      "Webpack",
+      "Babel",
+      "Docker",
+      "Storybook"
+    ]
+  }
+}
