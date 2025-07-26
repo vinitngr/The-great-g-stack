@@ -1,3 +1,9 @@
+> **Note:** This package is under active development.  
+> **Temporary Access Credentials:**  
+> &nbsp;&nbsp;&nbsp;&nbsp;• `username`: `vinit`  
+> &nbsp;&nbsp;&nbsp;&nbsp;• `token`: `mysecrettoken123`  
+> **Important:** Review `setup.sh` carefully before executing.
+
 # @theggs/cli
 
 A simple CLI to import and export stack templates from **theggs**.
