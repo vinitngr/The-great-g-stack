@@ -8,10 +8,10 @@
     "packages/*",
     "apps/*"
   ],
-  "packageManager": "npm@10.9.0",
   "devDependencies": {
     "turbo": "latest"
   },
+  "packageManager": "pnpm@8.6.3",
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",

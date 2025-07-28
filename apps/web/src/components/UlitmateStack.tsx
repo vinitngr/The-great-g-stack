@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { RotateCcw, Download, Plus, X, AlertCircle, Sparkles, Settings } from "lucide-react"
+import { RotateCcw, Download, Plus, X, AlertCircle, Sparkles, Settings, Save } from "lucide-react"
 import { ImprovedStackBuilder, type StackOption } from "./StackBuilder"
 import { Checkbox } from "@/components/ui/checkbox"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -674,8 +674,8 @@ Enterprise Requirements:
               Download JSON
             </Button>
             <Button onClick={handleSendToAI} className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700">
-              <Sparkles className="h-4 w-4" />
-              Save as Public/private
+              <Save className="h-4 w-4" />
+              Save to Server
             </Button>
             <Button variant="outline" onClick={handleReset} className="flex items-center gap-2 bg-transparent">
               <RotateCcw className="h-4 w-4" />
