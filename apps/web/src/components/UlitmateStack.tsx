@@ -658,20 +658,24 @@ Enterprise Requirements:
 
         {/* Header */}
         <div className="flex-shrink-0 text-center py-4 px-6 bg-white border-b border-gray-200">
-          <h1 className="text-2xl font-bold text-gray-900">🎉 Ultimate Stack Generated!</h1>
+          <h1 className="text-2xl font-bold text-gray-900">🎉 The-Great-G Stack Generated!</h1>
           <p className="text-sm text-gray-600 mt-1">Your custom development stack configuration is ready</p>
         </div>
 
         {/* Action Buttons */}
         <div className="flex-shrink-0 px-6 py-3 bg-white border-b border-gray-200">
           <div className="flex gap-3 justify-center">
+            <Button onClick={handleDownload} className="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600">
+              <Download className="h-4 w-4" />
+              Download Scrip.sh & package.json
+            </Button>
             <Button onClick={handleDownload} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700">
               <Download className="h-4 w-4" />
               Download JSON
             </Button>
             <Button onClick={handleSendToAI} className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700">
               <Sparkles className="h-4 w-4" />
-              Send to AI
+              Save as Public/private
             </Button>
             <Button variant="outline" onClick={handleReset} className="flex items-center gap-2 bg-transparent">
               <RotateCcw className="h-4 w-4" />
