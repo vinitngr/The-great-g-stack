@@ -4,7 +4,10 @@
   "description": "A powerful CLI tool to scaffold and export stack setups quickly.",
   "author": "Vinit Nagar",
   "private": true,
-  "workspaces": ["packages/*" , "apps/*"],
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "packageManager": "npm@10.9.0",
   "devDependencies": {
     "turbo": "latest"
@@ -13,5 +16,8 @@
     "dev": "turbo run dev",
     "build": "turbo run build",
     "import": "turbo run import"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1"
   }
 }
