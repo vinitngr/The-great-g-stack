@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { ChevronLeft, ChevronRight, RotateCcw, Download, Info } from "lucide-react"
-import { ImprovedStackBuilder, type StackOption } from "./stackBuilder"
+import { ImprovedStackBuilder, type StackOption } from "./StackBuilder"
 
 export default function ImprovedStackBuilderUI() {
   const [builder] = useState(() => new ImprovedStackBuilder())

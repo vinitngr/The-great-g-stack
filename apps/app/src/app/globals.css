@@ -119,3 +119,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+div[contenteditable] {
+  white-space: pre-wrap;
+  outline: none;
+}
