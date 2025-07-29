@@ -35,7 +35,7 @@ export async function POST(req : NextRequest ) {
       output: {
         "setup.sh": parsed["setup.sh"] || null,
         "package.json": parsed["package.json"] || null,
-        "stack.txt" : parsed["stack.txt"] || null
+        "strucuture.txt" : parsed["structure.txt"] || null
       },
     });
   } catch (err) {

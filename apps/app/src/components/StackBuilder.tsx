@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface StackOption {
-  customPrompt: string | number | readonly string[] | undefined
+  customPrompt?: string | number | readonly string[] | undefined
   id: string
   name: string
   category: string
