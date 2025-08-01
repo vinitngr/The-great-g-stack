@@ -10,6 +10,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Copy, DownloadIcon } from "lucide-react";
 import { SelectedStackItem } from "./Generator";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
 
 type AiResult = Record<string, string>;
 
@@ -40,16 +42,15 @@ export function ResultPage({ projectName, stackDetails, aiResult, onPublish, loa
         URL.revokeObjectURL(url);
     };
 
-    const handleDownloadFolder = () => {
-        Object.entries(aiResult).forEach(([filename, content]) => {
-            const blob = new Blob([content], { type: "text/plain" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = filename;
-            a.click();
-            URL.revokeObjectURL(url);
-        });
+    const handleDownloadFolder = async () => {
+    const zip = new JSZip();
+
+    Object.entries(aiResult).forEach(([filename, content]) => {
+        zip.file(filename, content);
+    });
+
+    const blob = await zip.generateAsync({ type: "blob" });
+    saveAs(blob, "project.zip");
     };
 
     return (
@@ -61,7 +62,7 @@ export function ResultPage({ projectName, stackDetails, aiResult, onPublish, loa
                 </CardHeader>
                 <CardFooter className="flex gap-4 justify-center">
                     <Button variant="outline" onClick={handleDownloadFolder}>Download</Button>
-                    <Button variant="outline" onClick={() => localStorage.setItem(`stack-${projectName}`, JSON.stringify(aiResult))}>LocalStore</Button>
+                    <Button variant="outline" onClick={() => localStorage.setItem(`stack-${projectName}`, JSON.stringify({ store : "local" , aiResult , date : new Date() }))}>LocalStore</Button>
                     <Button onClick={onPublish}>Publish</Button>
                 </CardFooter>
             </Card>
@@ -112,6 +113,14 @@ export function ResultPage({ projectName, stackDetails, aiResult, onPublish, loa
                         </CardContent>
                     )
                 }
+
+                { !loading && !aiResult?.[activeTab] && (
+                <div className="px-6">
+                    Broken Result
+                    <pre>{JSON.stringify(aiResult, null, 2)}</pre>
+                </div>
+                )}
+
             </Card>
         </div>
     );

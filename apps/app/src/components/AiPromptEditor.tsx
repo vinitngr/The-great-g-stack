@@ -11,27 +11,27 @@ type AiPromptEditorProps = {
   aboutProject: AboutProject;
 };
 
-export default function AiPromptEditor({ aiPrompt, setAiPrompt , stack , selectedStack , aboutProject }: AiPromptEditorProps) {
+export default function AiPromptEditor({ aiPrompt, setAiPrompt, stack, selectedStack, aboutProject }: AiPromptEditorProps) {
   const [showAbove, setShowAbove] = useState(false);
   const [showBelow, setShowBelow] = useState(false);
   const [copied, setCopied] = useState(false);
   console.log(aboutProject);
   const fullPrompt = `${generateAbovePrompt(selectedStack, aboutProject)}\n${aiPrompt}\n${generateBelowPrompt(stack)}`;
   const handleCopy = async () => {
-  await navigator.clipboard.writeText(fullPrompt);
-  setCopied(true);
-  setTimeout(() => setCopied(false), 1500);
+    await navigator.clipboard.writeText(fullPrompt);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
   };
 
   return (
     <div className="mb-8 select-none">
-    
+
       <div
         className="text-sm text-gray-700 bg-indigo-50 border border-indigo-100 p-2 rounded-md cursor-pointer mb-2"
         onClick={() => setShowAbove(prev => !prev)}
       >
         {showAbove ? (
-          <pre className='overflow-x-auto'>{generateAbovePrompt(selectedStack , aboutProject)}</pre>
+          <pre className='overflow-x-auto'>{generateAbovePrompt(selectedStack, aboutProject)}</pre>
         ) : (
           <div>Above Prompt... (click to expand)</div>
         )}
@@ -61,14 +61,14 @@ export default function AiPromptEditor({ aiPrompt, setAiPrompt , stack , selecte
         className='absolute top-6 right-6'
         onClick={handleCopy}
       >
-        {copied ? <CopyCheckIcon/> : <CopyIcon/>}
+        {copied ? <CopyCheckIcon /> : <CopyIcon />}
       </button>
     </div>
   );
 }
 
-export function generateAbovePrompt(selectedStack : SelectedStack , aboutProject : AboutProject) : string{
-    return `
+export function generateAbovePrompt(selectedStack: SelectedStack, aboutProject: AboutProject): string {
+  return `
     .
     You are a highly capable Stack Builder AI Agent. 
     Your objective is to generate a full-stack development setup based on a precise combination of user-defined technology stacks, preferences, and system-level requirements.
@@ -77,9 +77,8 @@ export function generateAbovePrompt(selectedStack : SelectedStack , aboutProject
 
     -----------------------------------------------------------------
         
-    📦 Output Format (STRICTLY ONE VALID JSON OBJECT ONLY):
-    All content must be valid JSON string values. Escape line breaks and quotes properly.
-
+    📦 Output Format (STRICTLY ONE VALID JSON OBJECT ONLY):  
+    All content must be valid JSON string values. Escape line breaks and quotes properly.  
     You MUST output exactly one JSON object with these keys:
 
     - "setup.sh": full bash script starting with #!/bin/bash, creating all required files/folders except setup.sh, root package.json, README.md, guide.txt; must be executable.
@@ -88,13 +87,17 @@ export function generateAbovePrompt(selectedStack : SelectedStack , aboutProject
 
     ${aboutProject.includeStructure ? `- "structure.txt": text resembling Unix 'tree' command showing all files/folders created.` : ``}
 
-    ${aboutProject.includeReadme ? `- "README.md": concise plaintext guide explaining the stack, files, and how to run/start the project. if its beginner then explain in detail , other wise only add complex guide where developer might suck` : ``}
+    ${aboutProject.includeReadme ? `- "README.md": concise plaintext guide explaining the stack, files, and how to run/start the project. if beginner, explain in detail; otherwise, only include complex areas developers may struggle with.` : ``}
 
-    Do NOT output any other keys.
-    Do NOT output anything outside this JSON object.
-    Each value must be a string preserving formatting.
+    Do NOT output any other keys.  
+    Do NOT output anything outside this JSON object.  
+    Each value must be a string preserving formatting.  
 
-    > 🚫 Do NOT output Markdown, explanations, or extra text.
+    > 🚫 Do NOT output Markdown, explanations, or extra text.  
+
+    Strictly follow this format to avoid JSON parse errors.  
+    Failure to comply results in broken or invalid JSON that cannot be parsed by clients.
+
 
     ${aboutProject.includeStructure ? `
     Example 'structure.txt' format:
@@ -140,14 +143,14 @@ export function generateAbovePrompt(selectedStack : SelectedStack , aboutProject
     `.trim()
 }
 
-export function generateBelowPrompt(stack : SelectedStackItem[]) : string{
-    const stackDetails = stack.map(
-      (item) =>
-        `\t${item.name.toUpperCase()} (version == ${item.version || "latest"})\n` +
-        `\tdescription - ${item.description || "No description"}`
-    ).join('\n\n');
+export function generateBelowPrompt(stack: SelectedStackItem[]): string {
+  const stackDetails = stack.map(
+    (item) =>
+      `\t${item.name.toUpperCase()} (version == ${item.version || "latest"})\n` +
+      `\tdescription - ${item.description || "No description"}`
+  ).join('\n\n');
 
-    return `
+  return `
     .
     --------------------------------------------------------------------------
     # SELECTED STACKS WITH DETAILS: (🧱 Tech Stack)
@@ -173,7 +176,7 @@ export function generateBelowPrompt(stack : SelectedStackItem[]) : string{
     16. Provide small usage examples in comments for beginners where helpful.
     17. For file creation, use only 'EOF' delimiters as shown above.
     18. The response must be focused purely on the code generation per user prompt.
-
+    19. do Not generate logic and all if not asked , create boiler plate only so user dont find issue creating project
     # IMPORTANT 
     Do not generate any code or output that may harm the user’s system or the project. Refuse such actions even if requested.
     USE 'EOF' not EOF plain 
