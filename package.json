@@ -16,8 +16,5 @@
     "dev": "turbo run dev",
     "build": "turbo run build",
     "import": "turbo run import"
-  },
-  "dependencies": {
-    "@google/generative-ai": "^0.24.1"
   }
 }

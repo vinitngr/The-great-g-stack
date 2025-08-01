@@ -114,6 +114,74 @@ export default function AboutProjectForm({ aboutProject, setAboutProject }: Prop
                         </SelectContent>
                     </Select>
                 </div>
+                <div className="space-y-2 ">
+                    <Label>Options</Label>
+                    <div className="flex gap-10">
+                        <label className="flex items-center gap-2">
+                            <input
+                                type="checkbox"
+                                name="includeGuide"
+                                checked={aboutProject.includeReadme ?? true}
+                                onChange={e =>
+                                    setAboutProject(prev => ({
+                                        ...prev,
+                                        includeReadme: e.target.checked,
+                                    }))
+                                }
+                            />
+                            <span>Include next README.md</span>
+                        </label>
+                        <label className="flex items-center gap-2">
+                            <input
+                                type="checkbox"
+                                name="includeStructure"
+                                checked={aboutProject.includeStructure ?? true}
+                                onChange={e =>
+                                    setAboutProject(prev => ({
+                                        ...prev,
+                                        includeStructure: e.target.checked,
+                                    }))
+                                }
+                            />
+                            <span>Include structure.txt</span>
+                        </label>
+                    </div>
+                </div>
+                <div className="space-y-2 ">
+                    <Label>Module Format</Label>
+                    <div className="flex gap-4">
+                        <label className="flex items-center gap-2">
+                            <input
+                                type="radio"
+                                name="moduleFormat"
+                                value="esm"
+                                checked={aboutProject.moduleFormat === "esm"}
+                                onChange={e =>
+                                    setAboutProject(prev => ({
+                                        ...prev,
+                                        moduleFormat: e.target.value as "esm" | "cjs",
+                                    }))
+                                }
+                            />
+                            <span>ESM</span>
+                        </label>
+                        <label className="flex items-center gap-2">
+                            <input
+                                type="radio"
+                                name="moduleFormat"
+                                value="cjs"
+                                checked={aboutProject.moduleFormat === "cjs"}
+                                onChange={e =>
+                                    setAboutProject(prev => ({
+                                        ...prev,
+                                        moduleFormat: e.target.value as "esm" | "cjs",
+                                    }))
+                                }
+                            />
+                            <span>CJS</span>
+                        </label>
+                    </div>
+                </div>
             </div>
         </form>
     );

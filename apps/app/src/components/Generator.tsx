@@ -10,8 +10,16 @@ import StepControls from './Navigator';
 import Header from './Others/Headerr';
 import StepMeter from './Others/StepMeter';
 import SelectedStackPrew from './SelectedStackPrew';
-import AiPromptEditor from './AiPromptEditor';
+import AiPromptEditor, { generateAbovePrompt, generateBelowPrompt } from './AiPromptEditor';
 import AboutProjectForm from './FirstStep';
+import CustomPackage from './CustomPackage';
+import { aiResponse } from '@/lib/aiGenerate';
+import { ResultPage } from './TggsResult';
+import { jsonrepair } from 'jsonrepair';
+import { Button } from './ui/button';
+import Drawer from './Drawer';
+
+type AiResult = Record<string, string>;
 
 
 export interface SelectedStackItem {
@@ -41,18 +49,23 @@ export interface SelectedStack {
   additionalLibraries?: SelectedStackItem[];
   configuration?: SelectedStackItem[];
   aiPrompt?: string;
+  customPackages?: SelectedStackItem[];
 }
 
 export type ProjectType = 'personal' | 'portfolio' | 'ecommerce' | 'healthcare' | 'education' | 'finance' | 'social' | 'entertainment' | 'productivity' | 'startup-saas' | 'enterprise' | 'logistics' | 'travel' | 'real-estate' | 'gaming' | 'blog' | 'news' | 'crypto' | 'ai' | 'iot' | 'open-source' | 'internal-tool' | 'other';
 
 export interface AboutProject {
   projectName: string;
-  description: string;
-  level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
-  projectType: ProjectType;
+  description?: string;
+  level?: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+  projectType?: ProjectType;
+  moduleFormat?: 'esm' | 'cjs';
+  includeStructure?: boolean;
+  includeReadme?: boolean;
 }
 
 const StackGenerator = () => {
+  const [drawerOpen, setDrawerOpen] = useState(false)
   const [editingOption, setEditingOption] = useState<SelectedStackItem | null>(null);
   const [tempDesc, setTempDesc] = useState('');
   const [tempVersion, setTempVersion] = useState('');
@@ -61,11 +74,16 @@ const StackGenerator = () => {
   const [showResults, setShowResults] = useState(false);
   const [editingItem, setEditingItem] = useState<string | null>(null);
   const [tempEdit, setTempEdit] = useState<{ version: string; description: string }>({ version: '', description: '' });
+  const [aiResult, setAiResult] = useState<AiResult | null>(null);
+  const [airesponseLoading, setairesponseLoading] = useState(false)
   const [aboutProject, setAboutProject] = useState<AboutProject>({
     projectName: "",
     description: "",
     level: "intermediate",
     projectType: "personal",
+    moduleFormat: "esm",
+    includeStructure: true,
+    includeReadme: true
   })
 
   const handleOptionChange = (stepKey: string, optionId: string, isMultiSelect: boolean) => {
@@ -138,6 +156,11 @@ const StackGenerator = () => {
     return allItems.sort((a, b) => a.category.localeCompare(b.category));
   };
 
+  const getPrompt = () => {
+    const fullPrompt = `${generateAbovePrompt(selectedStack, aboutProject)}\n${selectedStack.aiPrompt}\n${generateBelowPrompt(getAllSelectedItems())}\n`;
+    return fullPrompt
+  }
+
   const updateStackItem = (itemId: string, field: 'version' | 'description', newValue: string) => {
     setSelectedStack(prev => {
       const newStack = { ...prev };
@@ -204,21 +227,73 @@ const StackGenerator = () => {
     setEditingOption(null);
   };
 
+
+  const generateGStack = async () => {
+    setShowResults(true);
+    setairesponseLoading(true);
+    const prompt = getPrompt();
+    const res = await aiResponse(prompt);
+
+    let text = res?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    text = text
+      .trim()
+      .replace(/^```(?:json)?\s*/, '')
+      .replace(/```$/, '');
+
+    try {
+      const fixed = jsonrepair(text);
+      const parsed = JSON.parse(fixed);
+      parsed.prompt = prompt;
+      setAiResult(parsed);
+    } catch (e) {
+      setAiResult(null);
+      console.error('Invalid JSON after repair:', e);
+    } finally {
+      setairesponseLoading(false);
+    }
+  };
+
+
+  const handlePublish = () => {
+    console.log('Publish clicked');
+  };
+
+
   if (showResults) {
     return (
-      <div>result</div>
+      <ResultPage
+        loading={airesponseLoading}
+        aiResult={aiResult as AiResult || {}}
+        projectName={aboutProject.projectName || 'GStack'}
+        stackDetails={getAllSelectedItems()}
+        onPublish={handlePublish}
+      />
     );
+
   }
 
   const currentStepData = steps[currentStep - 1];
 
   return (
     <TooltipProvider>
+      <div className="fixed top-4 right-4 z-50">
+          <Button
+            onClick={() => setDrawerOpen(true)}
+            className="w-12 h-12 p-0 bg-gray-900 hover:bg-gray-800 text-white rounded-lg shadow-lg"
+          >
+            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.652.242 2.873.118 3.176.77.84 1.235 1.91 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+            </svg>
+          </Button>
+      </div>
+      {
+        drawerOpen && <Drawer open={drawerOpen} setOpen={setDrawerOpen} aboutProject={aboutProject} setAboutProject={setAboutProject} />
+      }
       <div className="box-border bg-gradient-to-br">
         <div className="max-w-4xl py-2  h-screen mx-auto flex flex-col gap-4">
           <Header />
           <StepMeter currentStep={currentStep} />
-          {getAllSelectedItems().length > 0 && <SelectedStackPrew selectedStack={getAllSelectedItems()} />}
+          {getAllSelectedItems().length > 0 && currentStep !== 17 && <SelectedStackPrew selectedStack={getAllSelectedItems()} />}
 
           <Card className='flex-1 gap-2 relative'>
             <CardHeader className="flex-shrink-0 gap-0">
@@ -233,7 +308,119 @@ const StackGenerator = () => {
               <div className='py-2 overflow-auto'>
                 {currentStep === 1 ? (
                   <AboutProjectForm aboutProject={aboutProject} setAboutProject={setAboutProject} />
-                ) : currentStep !== 17 ? (
+                ) : currentStep === 16 ? (
+                  <CustomPackage
+                    customPackages={selectedStack.customPackages || []}
+                    setCustomPackages={(packages) => setSelectedStack(prev => ({ ...prev, customPackages: packages as SelectedStackItem[] }))}
+                  />
+
+
+                ) : currentStep === 17 ? (
+                  <div className="gap-4 mb-8">
+                    <div className="mb-8">
+                      <AiPromptEditor
+                        aiPrompt={selectedStack.aiPrompt || ''}
+                        setAiPrompt={(val) => setSelectedStack(prev => ({ ...prev, aiPrompt: val }))}
+                        stack={getAllSelectedItems()}
+                        selectedStack={selectedStack}
+                        aboutProject={aboutProject}
+                      />
+                    </div>
+
+                    <div className="mb-8">
+                      {(() => {
+                        const allSelectedItems = getAllSelectedItems();
+                        return (
+                          <>
+                            <h3 className="text-lg font-semibold text-gray-900 mb-4">Selected Technologies ({allSelectedItems.length} items)</h3>
+                            {allSelectedItems.length > 0 ? (
+                              <div className="overflow-x-auto border border-gray-200 rounded-lg">
+                                <table className="min-w-full divide-y divide-gray-200">
+                                  <thead className="bg-gray-50">
+                                    <tr>
+                                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Selected</th>
+                                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Version</th>
+                                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody className="bg-white divide-y divide-gray-200">
+                                    {allSelectedItems.map((item) => (
+                                      <tr key={item.id} className="hover:bg-gray-50">
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                          <span className="px-2 py-1 text-xs font-medium bg-indigo-100 text-indigo-800 rounded-full">
+                                            {item.category || "Custom Package"}
+                                          </span>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                          <div className="text-sm font-medium text-gray-900">{item.name}</div>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                          {editingItem === item.id ? (
+                                            <input
+                                              type="text"
+                                              value={tempEdit.version}
+                                              onChange={(e) => setTempEdit(prev => ({ ...prev, version: e.target.value }))}
+                                              className="text-sm border border-gray-300 rounded px-2 py-1 w-20"
+                                            />
+                                          ) : (
+                                            <span className="text-sm text-gray-900">{item.version}</span>
+                                          )}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                          {editingItem === item.id ? (
+                                            <textarea
+                                              value={tempEdit.description}
+                                              onChange={(e) => setTempEdit(prev => ({ ...prev, description: e.target.value }))}
+                                              className="text-sm border border-gray-300 rounded px-2 py-1 w-full resize-none"
+                                              rows={2}
+                                            />
+                                          ) : (
+                                            <div className="text-sm text-gray-600 max-w-md">{item.description}</div>
+                                          )}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                          {editingItem === item.id ? (
+                                            <div className="flex items-center gap-2">
+                                              <button
+                                                onClick={() => saveEdit(item.id)}
+                                                className="text-green-600 hover:text-green-900"
+                                              >
+                                                <Save className="w-4 h-4" />
+                                              </button>
+                                              <button
+                                                onClick={cancelEdit}
+                                                className="text-red-600 hover:text-red-900"
+                                              >
+                                                <X className="w-4 h-4" />
+                                              </button>
+                                            </div>
+                                          ) : (
+                                            <button
+                                              onClick={() => startEdit(item.id, item.version, item.description)}
+                                              className="text-indigo-600 hover:text-indigo-900"
+                                            >
+                                              <Edit3 className="w-4 h-4" />
+                                            </button>
+                                          )}
+                                        </td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            ) : (
+                              <div className="text-center py-8 text-gray-500">
+                                <p>No technologies selected. Go back to previous steps to make selections.</p>
+                              </div>
+                            )}
+                          </>
+                        );
+                      })()}
+                    </div>
+                  </div>
+                ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
                     {currentStepData.options.map((option) => {
                       const isSelected = currentStepData.type === 'checkbox'
@@ -294,112 +481,6 @@ const StackGenerator = () => {
                       );
                     })}
                   </div>
-                ) : (
-                  <div className="gap-4 mb-8">
-                      <div className="mb-8">
-                        <AiPromptEditor
-                          aiPrompt={selectedStack.aiPrompt || ''}
-                          setAiPrompt={(val) => setSelectedStack(prev => ({ ...prev, aiPrompt: val }))}
-                          stack={getAllSelectedItems()}
-                          selectedStack={selectedStack}
-                          aboutProject={aboutProject}
-                        />
-                      </div>
-
-                      <div className="mb-8">
-                        {(() => {
-                          const allSelectedItems = getAllSelectedItems();
-                          return (
-                            <>
-                              <h3 className="text-lg font-semibold text-gray-900 mb-4">Selected Technologies ({allSelectedItems.length} items)</h3>
-                              {allSelectedItems.length > 0 ? (
-                                <div className="overflow-x-auto border border-gray-200 rounded-lg">
-                                  <table className="min-w-full divide-y divide-gray-200">
-                                    <thead className="bg-gray-50">
-                                      <tr>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Selected</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Version</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody className="bg-white divide-y divide-gray-200">
-                                      {allSelectedItems.map((item) => (
-                                        <tr key={item.id} className="hover:bg-gray-50">
-                                          <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className="px-2 py-1 text-xs font-medium bg-indigo-100 text-indigo-800 rounded-full">
-                                              {item.category}
-                                            </span>
-                                          </td>
-                                          <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-sm font-medium text-gray-900">{item.name}</div>
-                                          </td>
-                                          <td className="px-6 py-4 whitespace-nowrap">
-                                            {editingItem === item.id ? (
-                                              <input
-                                                type="text"
-                                                value={tempEdit.version}
-                                                onChange={(e) => setTempEdit(prev => ({ ...prev, version: e.target.value }))}
-                                                className="text-sm border border-gray-300 rounded px-2 py-1 w-20"
-                                              />
-                                            ) : (
-                                              <span className="text-sm text-gray-900">{item.version}</span>
-                                            )}
-                                          </td>
-                                          <td className="px-6 py-4">
-                                            {editingItem === item.id ? (
-                                              <textarea
-                                                value={tempEdit.description}
-                                                onChange={(e) => setTempEdit(prev => ({ ...prev, description: e.target.value }))}
-                                                className="text-sm border border-gray-300 rounded px-2 py-1 w-full resize-none"
-                                                rows={2}
-                                              />
-                                            ) : (
-                                              <div className="text-sm text-gray-600 max-w-md">{item.description}</div>
-                                            )}
-                                          </td>
-                                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            {editingItem === item.id ? (
-                                              <div className="flex items-center gap-2">
-                                                <button
-                                                  onClick={() => saveEdit(item.id)}
-                                                  className="text-green-600 hover:text-green-900"
-                                                >
-                                                  <Save className="w-4 h-4" />
-                                                </button>
-                                                <button
-                                                  onClick={cancelEdit}
-                                                  className="text-red-600 hover:text-red-900"
-                                                >
-                                                  <X className="w-4 h-4" />
-                                                </button>
-                                              </div>
-                                            ) : (
-                                              <button
-                                                onClick={() => startEdit(item.id, item.version, item.description)}
-                                                className="text-indigo-600 hover:text-indigo-900"
-                                              >
-                                                <Edit3 className="w-4 h-4" />
-                                              </button>
-                                            )}
-                                          </td>
-                                        </tr>
-                                      ))}
-                                    </tbody>
-                                  </table>
-                                </div>
-                              ) : (
-                                <div className="text-center py-8 text-gray-500">
-                                  <p>No technologies selected. Go back to previous steps to make selections.</p>
-                                </div>
-                              )}
-                            </>
-                          );
-                        })()}
-                      </div>
-
-                  </div>
                 )
                 }
               </div>
@@ -412,7 +493,7 @@ const StackGenerator = () => {
                     <p className="text-yellow-700 text-sm">This field is required to continue.</p>
                   </div>
                 )}
-                <StepControls currentStep={currentStep} prevStep={prevStep} nextStep={nextStep} />
+                <StepControls currentStep={currentStep} prevStep={prevStep} nextStep={nextStep} generateGStack={generateGStack} />
               </div>
             </CardContent>
           </Card>

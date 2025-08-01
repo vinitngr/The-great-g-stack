@@ -6,12 +6,14 @@ interface Props {
   currentStep: number;
   prevStep: () => void;
   nextStep: () => void;
+  generateGStack: () => void;
 }
 
 export default function StepControls({
   currentStep,
   prevStep,
-  nextStep
+  nextStep,
+  generateGStack
 }: Props) {
   return (
     <div className="flex justify-between pt-3 mt-2 border-t flex-shrink-0">
@@ -36,6 +38,7 @@ export default function StepControls({
 
         {currentStep === 17 ? (
           <Button
+            onClick={generateGStack}
             className="flex items-center cursor-pointer gap-2 bg-purple-600 hover:bg-purple-700"
           >
             Generate the-Great-G Stack
