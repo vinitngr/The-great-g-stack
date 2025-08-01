@@ -1,6 +1,14 @@
 
   const steps = [
     {
+      title: "Project Information",
+      type: "configuration",
+      key: "metadata",
+      category: "Metadata",
+      required: false ,
+      options: []
+    },
+    {
       title: "Language",
       type: "radio",
       key: "language",
@@ -178,34 +186,6 @@
       ]
     },
     {
-      title: "Monitoring & Analytics",
-      type: "checkbox",
-      key: "monitoring",
-      category: "Monitoring",
-      required: false,
-      options: [
-        { id: "sentry", name: "Sentry", version: "7.x", description: "Application monitoring and error tracking with performance insights and alerting", category: "Monitoring" },
-        { id: "datadog", name: "Datadog", version: "Latest", description: "Monitoring and analytics platform with APM, logs, and infrastructure monitoring", category: "Monitoring" },
-        { id: "google-analytics", name: "Google Analytics", version: "GA4", description: "Web analytics service by Google with event tracking and audience insights", category: "Monitoring" },
-        { id: "mixpanel", name: "Mixpanel", version: "Latest", description: "Product analytics platform with funnel analysis and user segmentation", category: "Monitoring" },
-        { id: "posthog", name: "PostHog", version: "3.x", description: "Open-source product analytics with feature flags and session recordings", category: "Monitoring" }
-      ]
-    },
-    {
-      title: "Additional Libraries",
-      type: "checkbox",
-      key: "additionalLibraries",
-      category: "Utilities",
-      required: false,
-      options: [
-        { id: "lodash", name: "Lodash", version: "4.x", description: "Modern JavaScript utility library with functional programming helpers and performance optimizations", category: "Utilities" },
-        { id: "axios", name: "Axios", version: "1.x", description: "Promise-based HTTP client with request/response interceptors and automatic JSON parsing", category: "Utilities" },
-        { id: "date-fns", name: "date-fns", version: "3.x", description: "Modern JavaScript date utility library with immutable functions and tree-shaking support", category: "Utilities" },
-        { id: "zod", name: "Zod", version: "3.x", description: "TypeScript-first schema validation with static type inference and runtime checking", category: "Utilities" },
-        { id: "react-query", name: "TanStack Query", version: "5.x", description: "Data fetching and caching library with background updates and optimistic updates", category: "Utilities" }
-      ]
-    },
-    {
       title: "Configuration & Environment",
       type: "checkbox",
       key: "configuration",
@@ -218,6 +198,14 @@
         { id: "husky", name: "Husky", version: "8.x", description: "Git hooks manager for running scripts on commit, push, and other Git events", category: "Development Tools" },
         { id: "commitizen", name: "Commitizen", version: "4.x", description: "Tool for writing conventional commit messages with interactive prompts", category: "Development Tools" }
       ]
+    },
+    {
+      title: "add library",
+      type: "package",
+      key: "additionalLibraries",
+      category: "Utilities",
+      required: false,
+      options: []
     },
     {
       title: "AI Assistant Prompt",
