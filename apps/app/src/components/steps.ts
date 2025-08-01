@@ -1,7 +1,7 @@
 
   const steps = [
     {
-      title: "Programming Language",
+      title: "Language",
       type: "radio",
       key: "language",
       category: "Core Language",
@@ -9,14 +9,10 @@
       options: [
         { id: "javascript", name: "JavaScript", version: "ES2023", description: "Dynamic, versatile language for web development with excellent ecosystem support", category: "Core Language" },
         { id: "typescript", name: "TypeScript", version: "5.3", description: "JavaScript with static type definitions for better development experience and error prevention", category: "Core Language" },
-        { id: "python", name: "Python", version: "3.12", description: "High-level, interpreted programming language known for readability and extensive libraries", category: "Core Language" },
-        { id: "java", name: "Java", version: "21", description: "Object-oriented, platform-independent language with strong enterprise support", category: "Core Language" },
-        { id: "go", name: "Go", version: "1.21", description: "Fast, compiled language by Google designed for modern distributed systems", category: "Core Language" },
-        { id: "rust", name: "Rust", version: "1.75", description: "Systems programming language focused on safety, speed, and concurrency", category: "Core Language" }
       ]
     },
     {
-      title: "Runtime Environment",
+      title: "Runtime",
       type: "radio",
       key: "runtime",
       category: "Runtime",
@@ -35,10 +31,11 @@
       category: "Architecture",
       required: true,
       options: [
-        { id: "frontend", name: "Frontend Only", version: "SPA", description: "Client-side application with API consumption, focusing on user interface and experience", category: "Architecture" },
-        { id: "backend", name: "Backend Only", version: "API", description: "Server-side API and business logic handling data processing and external integrations", category: "Architecture" },
-        { id: "fullstack", name: "Full Stack", version: "End-to-End", description: "Complete application with both frontend and backend components in a unified codebase", category: "Architecture" },
-        { id: "mobile", name: "Mobile", version: "Native/Hybrid", description: "Mobile application development targeting iOS, Android, or cross-platform solutions", category: "Architecture" }
+        { id: "frontend", name: "Frontend Only", version: "", description: "Client-side application with API consumption, focusing on user interface and experience", category: "Architecture" },
+        { id: "backend", name: "Backend Only", version: "", description: "Server-side API and business logic handling data processing and external integrations", category: "Architecture" },
+        { id: "fullstack", name: "Full Stack", version: "", description: "Complete application with both frontend and backend components in a unified codebase", category: "Architecture" },
+        { id: "monorepo(turbo Repo)", name: "monorepo", version: "", description: "Mobile application development targeting iOS, Android, or cross-platform solutions", category: "Architecture" },
+        { id: "backend + frontend", name: "fb", version: "", description: "Mobile application development targeting iOS, Android, or cross-platform solutions", category: "Architecture" },
       ]
     },
     {
@@ -65,7 +62,6 @@
         { id: "express", name: "Express.js", version: "4.x", description: "Minimal and flexible Node.js web framework with robust middleware ecosystem", category: "Backend Framework" },
         { id: "fastify", name: "Fastify", version: "4.x", description: "Fast and low overhead web framework with built-in JSON schema validation", category: "Backend Framework" },
         { id: "nestjs", name: "NestJS", version: "10.x", description: "Progressive Node.js framework with TypeScript, decorators, and dependency injection", category: "Backend Framework" },
-        { id: "django", name: "Django", version: "5.x", description: "High-level Python web framework with batteries-included philosophy and ORM", category: "Backend Framework" },
         { id: "fastapi", name: "FastAPI", version: "0.104", description: "Modern, fast Python API framework with automatic API documentation and type hints", category: "Backend Framework" }
       ]
     },
@@ -79,7 +75,8 @@
         { id: "npm", name: "npm", version: "10.x", description: "Default Node.js package manager with extensive registry and CLI tools", category: "Package Manager" },
         { id: "yarn", name: "Yarn", version: "4.x", description: "Fast, reliable package manager with workspaces and zero-installs support", category: "Package Manager" },
         { id: "pnpm", name: "pnpm", version: "8.x", description: "Efficient, disk space saving package manager with content-addressable storage", category: "Package Manager" },
-        { id: "bun-pm", name: "Bun", version: "1.x", description: "Ultra-fast package manager and bundler with native performance", category: "Package Manager" }
+        { id: "bun-pm", name: "Bun", version: "1.x", description: "Ultra-fast package manager and bundler with native performance", category: "Package Manager" },
+        { id: "deno-pm", name: "Deno", version: "1.x", description: "Ultra-fast package manager and bundler with native performance", category: "Package Manager" }
       ]
     },
     {
@@ -134,7 +131,7 @@
         { id: "tailwindcss", name: "Tailwind CSS", version: "3.x", description: "Utility-first CSS framework with customizable design system and JIT compilation", category: "Styling & UI" },
         { id: "styled-components", name: "Styled Components", version: "6.x", description: "CSS-in-JS library for React with dynamic styling and theming support", category: "Styling & UI" },
         { id: "mui", name: "Material-UI", version: "5.x", description: "React components implementing Google's Material Design with extensive customization", category: "Styling & UI" },
-        { id: "chakra", name: "Chakra UI", version: "2.x", description: "Modular and accessible component library with dark mode support", category: "Styling & UI" },
+        { id: "ShadCn", name: "Shadcn", version: "2.x", description: "Modular and accessible component library with dark mode support", category: "Styling & UI" },
         { id: "sass", name: "Sass", version: "1.x", description: "CSS extension language with variables, nesting, and mixins for maintainable styles", category: "Styling & UI" }
       ]
     },
