@@ -6,8 +6,12 @@ import { Button } from './ui/button'
 function UploadedStack({ userStacks }: { userStacks: { type: string; name: string; description: string; url: string; }[] }) {
     return (
         <div>
-
-            {userStacks.length > 0 ? (
+            {userStacks.length === 0 && (
+                <div className="text-gray-500 text-center text-sm py-3 bg-gray-50 border border-gray-200 rounded-md">
+                    No locally stored stack
+                </div>
+            )}
+            {userStacks.length > 0 && (
                 userStacks.map((stack, index) => (
                     <Card key={index} className="p-3">
                         <div className="space-y-2">
@@ -34,7 +38,7 @@ function UploadedStack({ userStacks }: { userStacks: { type: string; name: strin
                             </div>
                         </div>
                     </Card>
-                ))) : <div className='text-center text-gray-400'>no uploaded stack</div>
+                )))
             }
         </div>
     )

@@ -120,20 +120,20 @@ export function generateAbovePrompt(selectedStack: SelectedStack, aboutProject: 
 
     ------------------------------------------------------------------------
     # Project Metadata
-
-    - Project Name: ${aboutProject.projectName}
+    
+    - Project Name: ${aboutProject.projectName || 'you decide the project name'}
     - Project Type: ${aboutProject.projectType}
     - Language: ${selectedStack.language?.name || "javascript"}
     - Runtime: ${selectedStack.runtime?.name || "nodeJS"}
     - ModuleFormat : ${aboutProject.moduleFormat || "esm"}
     - stackType: ${selectedStack.stackType?.name || "select based on stacks"}
-    - Description: ${aboutProject.description || "No description"}
+    - Description: ${aboutProject.description || "No description given"}
     - Level: ${aboutProject.level} — determines project complexity and structure:
         • Beginner: simple structure with minimal files and folders.
         • Intermediate: balanced complexity; more comprehensive than beginner but less than expert.
         • Expert: advanced, enterprise-grade structure with high complexity and detailed folder organization.
 
-
+    - if anything is not given then use project metadata config what you like
     project consider beginner structure, for saas enterprise keep depth and structure top notch
     
     ------------------------------------------------------------------------
@@ -146,7 +146,7 @@ export function generateAbovePrompt(selectedStack: SelectedStack, aboutProject: 
 export function generateBelowPrompt(stack: SelectedStackItem[]): string {
   const stackDetails = stack.map(
     (item) =>
-      `\t${item.name.toUpperCase()} (version == ${item.version || "latest"})\n` +
+      `\t${item.name.toUpperCase()} (version == ${item.version || "latest"})  (category : ${item.category || "unavailable find out from description"})\n` +
       `\tdescription - ${item.description || "No description"}`
   ).join('\n\n');
 

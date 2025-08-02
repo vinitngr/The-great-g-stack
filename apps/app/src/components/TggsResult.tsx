@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Card,
     CardHeader,
@@ -22,9 +22,10 @@ type ResultProps = {
     aiResult: AiResult;
     onPublish: () => void;
     onDownloadFolder?: () => void;
-    aboutProject: AboutProject
+    aboutProject: AboutProject;
+    error?: string;
 };
-export function ResultPage({ projectName, stackDetails, aiResult, onPublish, loading , aboutProject }: ResultProps) {
+export function ResultPage({ projectName, stackDetails, aiResult, onPublish, loading, aboutProject, error }: ResultProps) {
     const [activeTab, setActiveTab] = useState(Object.keys(aiResult)[0] || "");
 
     const handleCopy = () => {
@@ -43,15 +44,20 @@ export function ResultPage({ projectName, stackDetails, aiResult, onPublish, loa
         URL.revokeObjectURL(url);
     };
 
+    useEffect(() => {
+        setActiveTab(Object.keys(aiResult)[0] || "");
+    } , [aiResult, loading])
+
+
     const handleDownloadFolder = async () => {
-    const zip = new JSZip();
+        const zip = new JSZip();
 
-    Object.entries(aiResult).forEach(([filename, content]) => {
-        zip.file(filename, content);
-    });
+        Object.entries(aiResult).forEach(([filename, content]) => {
+            zip.file(filename, content);
+        });
 
-    const blob = await zip.generateAsync({ type: "blob" });
-    saveAs(blob, "project.zip");
+        const blob = await zip.generateAsync({ type: "blob" });
+        saveAs(blob, `${aboutProject.projectName || ''}.zip`);
     };
 
     return (
@@ -63,7 +69,7 @@ export function ResultPage({ projectName, stackDetails, aiResult, onPublish, loa
                 </CardHeader>
                 <CardFooter className="flex gap-4 justify-center">
                     <Button className="cursor-pointer" onClick={handleDownloadFolder}>Download</Button>
-                    <Button className="cursor-pointer" onClick={() => localStorage.setItem(`stack-${projectName}`, JSON.stringify({ store : "local" , aiResult , date : new Date(), stackDetails , aboutProject }))}>LocalStore</Button>
+                    <Button className="cursor-pointer" onClick={() => localStorage.setItem(`stack-${projectName}`, JSON.stringify({ store: "local", aiResult, date: new Date(), stackDetails, aboutProject }))}>LocalStore</Button>
                     <Button onClick={onPublish} variant={"secondary"} className="cursor-pointer">Upload</Button>
                 </CardFooter>
             </Card>
@@ -97,7 +103,7 @@ export function ResultPage({ projectName, stackDetails, aiResult, onPublish, loa
                     </nav>
                 </CardHeader>
                 {
-                    loading ? <div className="flex justify-center items-center text-purple-500">Ai is generating your stack...</div> : (
+                    loading ? <div className="flex justify-center items-center text-slate-950">Ai is generating your stack...</div> : (
 
                         <CardContent className="relative">
                             <div className="absolute flex gap-4 top-2 right-12">
@@ -115,12 +121,28 @@ export function ResultPage({ projectName, stackDetails, aiResult, onPublish, loa
                     )
                 }
 
-                { !loading && !aiResult?.['setup.sh'] && (
-                <div className="px-6">
-                    Broken Result
-                    <pre>{JSON.stringify(aiResult, null, 2)}</pre>
-                </div>
-                )}
+                {!loading && error ? (
+                    (() => {
+                        try {
+                            const errObj = typeof error === "string" ? JSON.parse(error) : error;
+                            const msg = errObj?.error?.message || errObj?.message || "Unknown error";
+                            const code = errObj?.error?.code || errObj?.code || "";
+                            return (
+                                <div className="px-6 text-red-600 whitespace-pre-wrap">
+                                    <strong>Error{code && ` #${code}`}:</strong> {msg}
+                                </div>
+                            );
+                        } catch {
+                            return <pre className="px-6 text-red-600 whitespace-pre-wrap">{error}</pre>;
+                        }
+                    })()
+                ) : !loading && !aiResult?.['setup.sh'] ? (
+                    <div className="px-6">
+                        Broken Result
+                        <pre>{JSON.stringify(aiResult, null, 2)}</pre>
+                    </div>
+                ) : null}
+
 
             </Card>
         </div>

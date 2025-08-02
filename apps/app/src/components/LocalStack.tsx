@@ -60,7 +60,6 @@ export default function StackViewer() {
           key={idx}
           className="p-4 rounded-lg border border-gray-200 bg-white shadow-sm space-y-3"
         >
-          {/* Header */}
           <div className="flex justify-between items-center text-xs text-gray-600">
             <span className="px-2 py-1 rounded-md bg-gray-100 border border-gray-200">
               {item.store}
@@ -75,7 +74,6 @@ export default function StackViewer() {
             </span>
           </div>
 
-          {/* Tags */}
           {item.stackDetails && item.stackDetails.length > 0 && (
             <div className="flex flex-wrap gap-1">
               {item.stackDetails.map((s, i) => (
@@ -89,7 +87,6 @@ export default function StackViewer() {
             </div>
           )}
 
-          {/* Files */}
           {item.aiResult && (
             <div className="grid grid-cols-2 gap-2">
               {Object.keys(item.aiResult).map((filename) => (
@@ -115,7 +112,6 @@ export default function StackViewer() {
             </div>
           )}
 
-          {/* Zip Download */}
           {item.aiResult && Object.keys(item.aiResult).length > 1 && (
             <div className="flex  gap-2">
               <Button

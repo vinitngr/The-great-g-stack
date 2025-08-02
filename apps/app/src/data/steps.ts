@@ -32,10 +32,11 @@ const steps = [
         love: [],
         hate: []
       },
+
     ]
   },
   {
-    title: "Runtime",
+    title: "Runtime/Architecture",
     type: "radio",
     key: "runtime",
     category: "Runtime",
@@ -76,6 +77,15 @@ const steps = [
         category: "Runtime",
         love: [],
         hate: []
+      },
+      {
+        id: "wasm",
+        name: "WebAssembly (WASM)",
+        version: "latest",
+        description: "Use for projects targeting WebAssembly runtime; supports Rust, AssemblyScript, C/C++ compilation.",
+        category: "Runtime/Architecture",
+        love: ["performance", "cross-platform", "low-level"],
+        hate: ["JS-only environments"]
       }
     ]
   },
@@ -193,6 +203,51 @@ const steps = [
         category: "Architecture",
         love: [],
         hate: []
+      },
+      {
+        id: "static-site",
+        name: "Static Site",
+        version: "",
+        description: "Simple static HTML/CSS/JS site without frameworks, good for landing pages",
+        category: "Architecture",
+        love: [],
+        hate: []
+      },
+      {
+        id: "serverless",
+        name: "Serverless Backend",
+        version: "",
+        description: "Backend as serverless functions (AWS Lambda, Vercel functions, Netlify functions)",
+        category: "Architecture",
+        love: ["AWS Lambda", "Vercel", "Netlify"],
+        hate: []
+      },
+      {
+        id: "microservices",
+        name: "Microservices",
+        version: "",
+        description: "Multiple small services, separated backend APIs communicating via HTTP or messaging",
+        category: "Architecture",
+        love: ["Docker", "Kubernetes", "RabbitMQ"],
+        hate: []
+      },
+      {
+        id: "backend-ejs",
+        name: "Backend with EJS",
+        version: "",
+        description: "Backend project using Express with EJS templating engine for server-side rendered views",
+        category: "Architecture",
+        love: ["Express", "EJS"],
+        hate: []
+      },
+      {
+        id: "api-only",
+        name: "API Only",
+        version: "",
+        description: "Backend focused on REST or GraphQL API without frontend",
+        category: "Architecture",
+        love: ["Express", "Fastify", "Apollo"],
+        hate: []
       }
     ]
   },
@@ -265,6 +320,15 @@ const steps = [
         category: "Frontend Framework",
         love: [],
         hate: []
+      },
+      {
+        id: "Otherfrontend",
+        name: "Other",
+        version: "compatible",
+        description: "about your frontend framework ...",
+        category: "Frontend Framework",
+        love: [],
+        hate: []
       }
     ]
 
@@ -320,6 +384,24 @@ const steps = [
         category: "Backend Framework",
         love: ["deno"],
         hate: ["nodejs", "bun"]
+      },
+      {
+        id: "koa",
+        name: "Koa",
+        version: "2.x",
+        description: "Minimal and modern Node.js framework; middleware-focused, lightweight alternative to Express",
+        category: "Backend Framework",
+        love: ["nodejs"],
+        hate: ["deno", "bun"]
+      },
+       {
+        id: "Otherbackend",
+        name: "Other",
+        version: "compatible",
+        description: "about your backend framework ...",
+        category: "Backend Framework",
+        love: [],
+        hate: []
       }
     ]
   },
@@ -396,13 +478,53 @@ const steps = [
         version: "compatible",
         description: "add D1 or kV binding in .toml",
         category: "Database",
-        package: ["prisma" , "drizzleORM", "wrangler"],
+        package: ["prisma", "drizzleORM", "wrangler"],
         love: ["serverless", "cloudflare"],
         hate: []
       },
       {
-        id: "Other",
-        name: "Other cloud GCP, AWS , Azure etc",
+        id: "cassandra",
+        name: "Apache Cassandra",
+        version: "4.x",
+        description: "distributed NoSQL database for high availability and scalability",
+        category: "Database",
+        package: ["cassandra-driver"],
+        love: ["nosql", "distributed", "scalable"],
+        hate: ["relational"]
+      },
+      {
+        id: "cockroachdb",
+        name: "CockroachDB",
+        version: "latest",
+        description: "cloud-native SQL database with strong consistency and horizontal scaling",
+        category: "Database",
+        package: ["pg"],
+        love: ["relational", "scalable", "cloud-native"],
+        hate: ["nosql"]
+      },
+      {
+        id: "dynamodb",
+        name: "AWS DynamoDB",
+        version: "latest",
+        description: "fully managed NoSQL database, serverless, low-latency",
+        category: "Database",
+        package: ["aws-sdk", "dynamodb-doc-client"],
+        love: ["nosql", "serverless", "scalable"],
+        hate: ["relational"]
+      },
+      {
+        id: "elasticsearch",
+        name: "Elasticsearch",
+        version: "8.x",
+        description: "search and analytics engine for structured and unstructured data",
+        category: "Database",
+        package: ["@elastic/elasticsearch"],
+        love: ["search", "analytics", "scalable"],
+        hate: []
+      },
+      {
+        id: "OtherDB",
+        name: "Other",
         version: "compatible",
         description: "add your db requirement ..... \nuse their own cli if available",
         category: "Database",
@@ -411,7 +533,6 @@ const steps = [
         hate: []
       }
     ]
-
   },
   {
     title: "ORM/ODM",
@@ -471,13 +592,13 @@ const steps = [
         hate: []
       },
       {
-        id: "kysely",
-        name: "Kysely",
-        version: "0.25",
-        description: "use for type-safe SQL building; create config and schema files if intermediate+",
+        id: "OtherORM",
+        name: "Other",
+        version: "compatible",
+        description: "add your db requirement ..... \nuse their own cli if available",
         category: "ORM/ODM",
-        package: ["kysely"],
-        love: ["type-safety", "typescript"],
+        package: ["", ""],
+        love: ["database", "orm"],
         hate: []
       }
     ]
@@ -550,10 +671,18 @@ const steps = [
         package: ["lucia-auth"],
         love: [],
         hate: []
+      },
+      {
+        id: "otherauth",
+        name: "Other",
+        version: "compatible",
+        description: "add your auth requirement ..... \n",
+        category: "auth",
+        package: [""],
+        love: ["auth", "security"],
+        hate: []
       }
     ]
-
-
   },
   {
     title: "Styling & UI",
@@ -633,6 +762,24 @@ const steps = [
         category: "Styling & UI",
         love: [],
         hate: []
+      },
+      {
+        id: "chakra-ui",
+        name: "Chakra UI",
+        version: "2.x",
+        description: "accessible, composable React components",
+        category: "Styling & UI",
+        love: ["react"],
+        hate: []
+      },
+      {
+        id: "otherstyling",
+        name: "Other",
+        version: "compatible",
+        description: "add your styling requirement ..... \n",
+        category: "Styling & UI",
+        love: ["styling", "UI"],
+        hate: []
       }
     ]
   },
@@ -695,6 +842,15 @@ const steps = [
         description: "use if Bun runtime detected or preferred",
         category: "Testing",
         love: ["bun"],
+        hate: []
+      },
+      {
+        id: "otherTesting",
+        name: "Other",
+        version: "compatible",
+        description: "add your testing requirement ..... \n",
+        category: "Testing",
+        love: ["testing"],
         hate: []
       }
     ]
@@ -759,6 +915,15 @@ const steps = [
         description: "Built-in bundler for Bun with fast performance and simple configuration",
         category: "Build Tool",
         love: ["bun"],
+        hate: []
+      },
+      {
+        id: "otherBuild",
+        name: "Other",
+        version: "compatible",
+        description: "add your build requirement ..... \n",
+        category: "Build Tool",
+        love: ["build"],
         hate: []
       }
     ]
@@ -832,6 +997,15 @@ const steps = [
         category: "Deployment",
         love: [],
         hate: []
+      },
+      {
+        id: "otherDeployment",
+        name: "Other",
+        version: "compatible",
+        description: "add your deployment requirement ..... \n",
+        category: "Deployment",
+        love: ["deployment"],
+        hate: []
       }
     ]
   },
@@ -904,6 +1078,274 @@ const steps = [
         category: "Development Tools",
         love: ["monorepo"],
         hate: []
+      },
+      {
+        id: "otherConfig",
+        name: "Other",
+        version: "compatible",
+        description: "add your configuration requirement ..... \n",
+        category: "Development Tools",
+        love: ["configuration"],
+        hate: []
+      }
+    ]
+  },
+  {
+    title: "Additional Services",
+    type: "checkbox",
+    key: "additionalServices",
+    category: "Additional",
+    required: false,
+    options: [
+      {
+        title: "Logging & Monitoring",
+        type: "radio",
+        id: "logging_monitoring",
+        key: "logging_monitoring",
+        category: "Observability",
+        required: false,
+        options: [
+          {
+            id: "sentrylog",
+            name: "Sentry",
+            description: "Error tracking and performance monitoring",
+            category: "Observability",
+            love: ["error-tracking", "performance"],
+            hate: []
+          },
+          {
+            id: "logrocket",
+            name: "LogRocket",
+            description: "Session replay and product analytics",
+            category: "Observability",
+            love: ["session-replay", "analytics"],
+            hate: []
+          },
+          {
+            id: "datadog",
+            name: "Datadog",
+            description: "Full-stack observability platform",
+            category: "Observability",
+            love: ["metrics", "apm"],
+            hate: []
+          },
+          {
+            id: "additional/logging_monitoring",
+            name: "Other/Additional",
+            description: "Specify other logging/monitoring tools",
+            category: "Observability",
+            love: [],
+            hate: []
+          }
+        ]
+      },
+      {
+        title: "Analytics",
+        type: "checkbox",
+        id: "analytics",
+        description: "Select analytics tools",
+        key: "analytics",
+        name : "Analytics",
+        category: "Insights",
+        required: false,
+        options: [
+          {
+            id: "google_analytics",
+            name: "Google Analytics",
+            description: "Web analytics service",
+            category: "Insights",
+            love: ["free-tier", "integration"],
+            hate: ["privacy"]
+          },
+          {
+            id: "mixpanel",
+            name: "Mixpanel",
+            description: "Advanced product analytics",
+            category: "Insights",
+            love: ["user-journeys", "retention"],
+            hate: []
+          },
+          {
+            id: "amplitude",
+            name: "Amplitude",
+            description: "Product analytics for digital products",
+            category: "Insights",
+            love: ["behavioral-analytics"],
+            hate: []
+          },
+          {
+            id: "additional/analytics",
+            name: "Other/Additional",
+            description: "Specify other analytics tools",
+            category: "Insights",
+            love: [],
+            hate: []
+          }
+        ]
+      },
+      {
+        title: "Error Handling",
+        type: "checkbox",
+        id: "errorHandling",
+        key: "error_handling",
+        name : "Error Handling",
+        category: "Resilience",
+        required: false,
+        options: [
+          {
+            id: "sentryhandling",
+            name: "Sentry",
+            description: "Error tracking and monitoring",
+            category: "Resilience",
+            love: ["real-time", "stack-traces"],
+            hate: []
+          },
+          {
+            id: "rollbar",
+            name: "Rollbar",
+            description: "Real-time error monitoring",
+            category: "Resilience",
+            love: ["debugging", "notifications"],
+            hate: []
+          },
+          {
+            id: "additional/errorHandling",
+            name: "Other/Additional",
+            description: "Specify other error handling tools",
+            category: "Resilience",
+            love: [],
+            hate: []
+          }
+        ]
+      },
+      {
+        title: "Internationalization (i18n)",
+        type: "checkbox",
+        key: "i18n",
+        id:"i18n",
+        name: "Internationalization",
+        category: "Localization",
+        required: false,
+        options: [
+          {
+            id: "i18next",
+            name: "i18next",
+            description: "Popular i18n framework for JavaScript",
+            category: "Localization",
+            love: ["react", "vue", "angular"],
+            hate: []
+          },
+          {
+            id: "polyglot",
+            name: "Polyglot.js",
+            description: "Lightweight i18n helper",
+            category: "Localization",
+            love: ["simple", "small"],
+            hate: ["complex"]
+          },
+          {
+            id: "formatjs",
+            name: "FormatJS",
+            description: "Modular i18n libraries",
+            category: "Localization",
+            love: ["icu", "standards"],
+            hate: []
+          },
+          {
+            id: "additional/i18n",
+            name: "Other/Additional",
+            description: "add your i18n requirement...\n",
+            category: "Localization",
+            love: [],
+            hate: []
+          }
+        ]
+      },
+      {
+        title: "Security",
+        type: "checkbox",
+        key: "security",
+        id:"security",
+        category: "Security",
+        required: false,
+        name: "Security",
+        options: [
+          {
+            id: "helmet",
+            name: "Helmet",
+            description: "Secure Express apps with HTTP headers",
+            category: "Security",
+            love: ["express", "headers"],
+            hate: []
+          },
+          {
+            id: "rate_limiting",
+            name: "Rate Limiting",
+            description: "Protect against brute force attacks",
+            category: "Security",
+            love: ["ddos-protection"],
+            hate: []
+          },
+          {
+            id: "cors",
+            name: "CORS",
+            description: "Cross-Origin Resource Sharing",
+            category: "Security",
+            love: ["security", "flexibility"],
+            hate: []
+          },
+          {
+            id: "additional/security",
+            name: "Other/Additional",
+            description: "Specify other security tools",
+            category: "Security",
+            love: [],
+            hate: []
+          }
+        ]
+      },
+      {
+        title: "Payment Processing",
+        type: "radio",
+        key: "payments",
+        id: "payment",
+        name: "Payment Processing",
+        category: "Payments",
+        required: false,
+        options: [
+          {
+            id: "stripe/Payment",
+            name: "Stripe",
+            description: "Online payment processing",
+            category: "Payments",
+            love: ["api", "subscriptions"],
+            hate: []
+          },
+          {
+            id: "paypal",
+            name: "PayPal",
+            description: "Online payment system",
+            category: "Payments",
+            love: ["ubiquity"],
+            hate: ["fees"]
+          },
+          {
+            id: "razorpay",
+            name: "Razorpay",
+            description: "Payment gateway for India",
+            category: "Payments",
+            love: ["india"],
+            hate: []
+          },
+          {
+            id: "additional/payment",
+            name: "Other/Additional",
+            description: "Specify other payment processors",
+            category: "Payments",
+            love: [],
+            hate: []
+          }
+        ]
       }
     ]
   }

@@ -18,6 +18,8 @@ import { ResultPage } from './TggsResult';
 import { Button } from './ui/button';
 import Drawer from './Drawer';
 import { parse } from 'jsonc-parser';
+import AdditionalServices from './AdditionalService';
+import { cn } from '@/lib/utils';
 
 type AiResult = Record<string, string>;
 
@@ -50,6 +52,7 @@ export interface SelectedStack {
   configuration?: SelectedStackItem[];
   aiPrompt?: string;
   customPackages?: SelectedStackItem[];
+  additionalServices?: SelectedStackItem[];
 }
 
 export type ProjectType = 'personal' | 'portfolio' | 'ecommerce' | 'healthcare' | 'education' | 'finance' | 'social' | 'entertainment' | 'productivity' | 'startup-saas' | 'enterprise' | 'logistics' | 'travel' | 'real-estate' | 'gaming' | 'blog' | 'news' | 'crypto' | 'ai' | 'iot' | 'open-source' | 'internal-tool' | 'other';
@@ -63,7 +66,26 @@ export interface AboutProject {
   includeStructure?: boolean;
   includeReadme?: boolean;
 }
+export interface StepOption {
+  id: string;
+  name: string;
+  version?: string;
+  description: string;
+  category?: string;
+  love?: string[];
+  hate?: string[];
+  package?: string[];
+  options?: StepOption[];
+}
 
+export interface Step {
+  title: string;
+  type: string;
+  key: string;
+  category: string;
+  required?: boolean;
+  options: StepOption[];
+}
 const StackGenerator = () => {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [editingOption, setEditingOption] = useState<SelectedStackItem | null>(null);
@@ -85,20 +107,25 @@ const StackGenerator = () => {
     includeStructure: true,
     includeReadme: true
   })
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
 
   const handleOptionChange = (stepKey: string, optionId: string, isMultiSelect: boolean) => {
-    const currentStepData = steps.find(step => step.key === stepKey);
-    if (!currentStepData) return;
+    const currentStepData = (steps as Step[]).find(step => step.key === stepKey);
+    if (!currentStepData) {
+      return 
+    };
 
+    
     const option = currentStepData.options.find(opt => opt.id === optionId);
     if (!option) return;
 
     const stackItem: SelectedStackItem = {
       id: option.id,
       name: option.name,
-      version: option.version,
+      version: option.version || 'compatible',
       description: option.description,
-      category: option.category,
+      category: option.category || '',
       selected: true
     };
 
@@ -113,11 +140,18 @@ const StackGenerator = () => {
         } else {
           newSelections = [...currentSelections, stackItem];
         }
+        if(stackItem.name.startsWith("Other")){
+          openEditor(stackItem);
+        }
         return { ...prev, [stepKey]: newSelections };
       } else {
+        if(stackItem.name.startsWith("Other")){
+          openEditor(stackItem);
+        }
         return { ...prev, [stepKey]: stackItem };
       }
     });
+    
   };
 
   const canProceed = () => {
@@ -129,7 +163,7 @@ const StackGenerator = () => {
   };
 
   const nextStep = () => {
-    if (currentStep < 17 && canProceed()) {
+    if (currentStep < 18 && canProceed()) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -227,36 +261,45 @@ const StackGenerator = () => {
     setEditingOption(null);
   };
 
+  const generateGStack = async () => {
+    setShowResults(true);
+    setairesponseLoading(true);
+    setErrorMessage(null);
 
-const generateGStack = async () => {
-  setShowResults(true);
-  setairesponseLoading(true);
-  const prompt = getPrompt();
-  const res = await aiResponse(prompt);
+    const prompt = getPrompt();
 
-  let text = res?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-  text = text.trim().replace(/^```(?:json)?\s*/, '').replace(/```$/, '');
+    try {
+      const res = await aiResponse(prompt);
 
-  const firstBrace = text.indexOf('{');
-  const lastBrace = text.lastIndexOf('}');
-  if (firstBrace === -1 || lastBrace === -1) {
-    setAiResult(null);
-    setairesponseLoading(false);
-    console.error('No valid JSON braces found');
-    return;
-  }
-  const jsonSubstring = text.slice(firstBrace, lastBrace + 1);
+      let text = res?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      text = text.trim().replace(/^```(?:json)?\s*/, '').replace(/```$/, '');
 
-  try {
-    const parsed = parse(jsonSubstring, [], { allowTrailingComma: true, disallowComments: false });
-    parsed.prompt = prompt;
-    setAiResult(parsed);
-  } catch {
-    setAiResult({ prompt });
-  } finally {
-    setairesponseLoading(false);
-  }
-};
+      const firstBrace = text.indexOf('{');
+      const lastBrace = text.lastIndexOf('}');
+      if (firstBrace === -1 || lastBrace === -1) {
+        setAiResult({});
+        setErrorMessage('No valid JSON braces found in response');
+        return;
+      }
+
+      const jsonSubstring = text.slice(firstBrace, lastBrace + 1);
+
+      try {
+        const parsed = parse(jsonSubstring, [], { allowTrailingComma: true, disallowComments: false });
+        parsed.prompt = prompt;
+        setAiResult(parsed);
+      } catch (err) {
+        setErrorMessage((err as Error)?.message || 'Failed to parse AI response');
+        setAiResult({ prompt });
+      }
+    } catch (err: any) {
+      setErrorMessage(err?.message || 'Failed to fetch AI response');
+      setAiResult({});
+    } finally {
+      setairesponseLoading(false);
+    }
+  };
+
 
   const handlePublish = () => {
     console.log('Publish clicked');
@@ -271,6 +314,7 @@ const generateGStack = async () => {
         stackDetails={getAllSelectedItems()}
         onPublish={handlePublish}
         aboutProject={aboutProject}
+        error={errorMessage || undefined}
       />
     );
 
@@ -285,7 +329,7 @@ const generateGStack = async () => {
           onClick={() => setDrawerOpen(true)}
           className="w-12 h-12 p-0 bg-gray-900 hover:bg-gray-800 text-white rounded-lg shadow-lg"
         >
-          <Layers className='size-6'/>
+          <Layers className='size-6' />
         </Button>
       </div>
       {
@@ -295,27 +339,38 @@ const generateGStack = async () => {
         <div className="max-w-4xl py-2  h-screen mx-auto flex flex-col gap-4">
           <Header />
           <StepMeter currentStep={currentStep} />
-          {getAllSelectedItems().length > 0 && currentStep !== 17 && <SelectedStackPrew selectedStack={getAllSelectedItems()} />}
+          {getAllSelectedItems().length > 0 && currentStep !== 18 && <SelectedStackPrew selectedStack={getAllSelectedItems()} />}
 
           <Card className='flex-1 gap-2 relative'>
             <CardHeader className="flex-shrink-0 gap-0">
               <CardTitle className="flex items-center gap-1 text-lg">
-                <div className='flex gap-2 items-center'>{currentStep == 17 && <Sparkles className="h-5 w-5 text-purple-500" />} {currentStepData.title}</div>
+                <div className='flex gap-2 items-center'>{currentStep == 18 && <Sparkles className="h-5 w-5 text-purple-500" />} {currentStepData.title}</div>
 
               </CardTitle>
               <CardDescription className="text-sm">{currentStepData.category}</CardDescription>
             </CardHeader>
 
-            <CardContent className='flex flex-col justify-between flex-1 ' >
-              <div className='py-2 overflow-auto'>
-                { currentStep === 1 ? (
+            <CardContent className='flex flex-col justify-between flex-1 gap-0' >
+              <div className={cn('py-2 overflow-auto', (currentStep !== 18 && currentStep !== 1) && 'h-60')}>
+                {currentStep === 1 ? (
                   <AboutProjectForm aboutProject={aboutProject} setAboutProject={setAboutProject} />
                 ) : currentStep === 16 ? (
+                  <AdditionalServices
+                    additionalServices={selectedStack.additionalServices || []}
+                    setAdditionalServices={(services) =>
+                      setSelectedStack(prev => ({ ...prev, additionalServices: services as SelectedStackItem[] }))
+                    }
+                    openEditor={(item) => {
+                      openEditor(item as SelectedStackItem);
+                    }}
+                    stack={currentStepData as Step}
+                  />
+                ) : currentStep === 17 ? (
                   <CustomPackage
                     customPackages={selectedStack.customPackages || []}
                     setCustomPackages={(packages) => setSelectedStack(prev => ({ ...prev, customPackages: packages as SelectedStackItem[] }))}
                   />
-                ) : currentStep === 17 ? (
+                ) : currentStep === 18 ? (
                   <div className="gap-4 mb-8">
                     <div className="mb-8">
                       <AiPromptEditor
@@ -423,11 +478,12 @@ const generateGStack = async () => {
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
                     {currentStepData.options.map((option) => {
+                      if (currentStep == 16) return null;
                       const isSelected = currentStepData.type === 'checkbox'
                         ? (selectedStack[currentStepData.key as keyof typeof selectedStack] as SelectedStackItem[] || []).some(item => item.id === option.id)
                         : (selectedStack[currentStepData.key as keyof typeof selectedStack] as SelectedStackItem)?.id === option.id;
 
-                      let displayItem = { ...option, selected: false };
+                      let displayItem = { version: '', ...option, selected: false };
                       if (isSelected) {
                         if (currentStepData.type === 'checkbox') {
                           const found = (selectedStack[currentStepData.key as keyof typeof selectedStack] as SelectedStackItem[] || []).find(item => item.id === option.id);
@@ -467,7 +523,7 @@ const generateGStack = async () => {
                               <button
                                 onClick={e => {
                                   e.stopPropagation();
-                                  openEditor(displayItem);
+                                  openEditor(displayItem as SelectedStackItem);
                                 }}
                                 className="ml-2 text-indigo-600 hover:text-indigo-900"
                                 aria-label="Edit"

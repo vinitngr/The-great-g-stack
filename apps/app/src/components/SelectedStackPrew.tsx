@@ -17,7 +17,7 @@ function SelectedStackPrew({ selectedStack }: SelectedStackPrewProps) {
                     {selectedStack.map((key: SelectedStackItem) => {
                         return (
                             <Badge key={key.id} variant="secondary" className="text-xs bg-white border border-gray-300">
-                                {key.name}
+                                {key.id}
                             </Badge>
                         )
                     })}

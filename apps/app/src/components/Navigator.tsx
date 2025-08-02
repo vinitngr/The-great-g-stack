@@ -36,7 +36,7 @@ export default function StepControls({
           Reset
         </Button>
 
-        {currentStep === 17 ? (
+        {currentStep === 18 ? (
           <Button
             onClick={generateGStack}
             className="flex items-center cursor-pointer gap-2 bg-purple-600 hover:bg-purple-700"
