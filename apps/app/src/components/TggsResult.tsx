@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Copy, DownloadIcon } from "lucide-react";
-import { SelectedStackItem } from "./Generator";
+import { AboutProject, SelectedStackItem } from "./Generator";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 
@@ -22,8 +22,9 @@ type ResultProps = {
     aiResult: AiResult;
     onPublish: () => void;
     onDownloadFolder?: () => void;
+    aboutProject: AboutProject
 };
-export function ResultPage({ projectName, stackDetails, aiResult, onPublish, loading }: ResultProps) {
+export function ResultPage({ projectName, stackDetails, aiResult, onPublish, loading , aboutProject }: ResultProps) {
     const [activeTab, setActiveTab] = useState(Object.keys(aiResult)[0] || "");
 
     const handleCopy = () => {
@@ -55,20 +56,20 @@ export function ResultPage({ projectName, stackDetails, aiResult, onPublish, loa
 
     return (
         <div className="p-8 max-w-5xl mx-auto font-sans">
-            <Card className="mb-2 flex justify-between">
+            <Card className="mb-2 flex justify-between bg-gray-800">
                 <CardHeader>
-                    <CardTitle className="text-xl text-center">{projectName}</CardTitle>
-                    <CardDescription className="text-center">description</CardDescription>
+                    <CardTitle className="text-xl text-white text-center">{aboutProject.projectName || "GStack"}</CardTitle>
+                    <CardDescription className="text-center text-gray-300">{aboutProject.description || "no Description"}</CardDescription>
                 </CardHeader>
                 <CardFooter className="flex gap-4 justify-center">
-                    <Button variant="outline" onClick={handleDownloadFolder}>Download</Button>
-                    <Button variant="outline" onClick={() => localStorage.setItem(`stack-${projectName}`, JSON.stringify({ store : "local" , aiResult , date : new Date() }))}>LocalStore</Button>
-                    <Button onClick={onPublish}>Publish</Button>
+                    <Button className="cursor-pointer" onClick={handleDownloadFolder}>Download</Button>
+                    <Button className="cursor-pointer" onClick={() => localStorage.setItem(`stack-${projectName}`, JSON.stringify({ store : "local" , aiResult , date : new Date(), stackDetails , aboutProject }))}>LocalStore</Button>
+                    <Button onClick={onPublish} variant={"secondary"} className="cursor-pointer">Upload</Button>
                 </CardFooter>
             </Card>
 
             <Card className="mb-2">
-                <CardHeader>
+                <CardHeader className="gap-0">
                     <CardTitle>Selected Stack Details</CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -114,7 +115,7 @@ export function ResultPage({ projectName, stackDetails, aiResult, onPublish, loa
                     )
                 }
 
-                { !loading && !aiResult?.[activeTab] && (
+                { !loading && !aiResult?.['setup.sh'] && (
                 <div className="px-6">
                     Broken Result
                     <pre>{JSON.stringify(aiResult, null, 2)}</pre>

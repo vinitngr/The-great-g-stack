@@ -177,6 +177,8 @@ export function generateBelowPrompt(stack: SelectedStackItem[]): string {
     17. For file creation, use only 'EOF' delimiters as shown above.
     18. The response must be focused purely on the code generation per user prompt.
     19. do Not generate logic and all if not asked , create boiler plate only so user dont find issue creating project
+    20. If you remove a stack or replace it with an alternative due to incompatibility, and no other changes are made, explain decision in the README.md when the user requests it in the output.
+    
     # IMPORTANT 
     Do not generate any code or output that may harm the user’s system or the project. Refuse such actions even if requested.
     USE 'EOF' not EOF plain 
