@@ -1,8 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react'
-import { Card } from './ui/card'
-import { Badge, Cloud, Layers, User, X } from 'lucide-react'
+import { Cloud, Layers, User, X } from 'lucide-react'
 import { Button } from './ui/button'
 
 import { AboutProject } from './Generator'

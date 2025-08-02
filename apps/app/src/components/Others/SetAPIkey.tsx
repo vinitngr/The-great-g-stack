@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '../ui/button'
-import { Info, Plus, Trash, X } from 'lucide-react'
+import { Info, Plus } from 'lucide-react'
 import { Label } from '@radix-ui/react-label'
 import { Input } from '../ui/input'
 

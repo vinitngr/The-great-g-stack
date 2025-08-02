@@ -2,7 +2,7 @@
 "use client"
 import React, { useState } from 'react';
 import { Edit3, Save, X, Sparkles, Settings2, Layers } from 'lucide-react';
-import steps from './steps';
+import steps from '../data/steps';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { TooltipProvider } from './ui/tooltip';
 import EditStackModal from './EditStackModel';

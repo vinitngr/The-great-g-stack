@@ -4,7 +4,7 @@ export async function aiResponse(prompt: string) {
     let key = process.env.NEXT_PUBLIC_GEMINI_API_KEY || '';
 
     if (typeof window !== 'undefined') {
-        const storedKey = localStorage.getItem('UserGeminiApiKey');
+        const storedKey = localStorage.getItem('TGGS-useGeminiApiKey');
         if (storedKey) key = storedKey;
     }
 

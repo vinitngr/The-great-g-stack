@@ -1,5 +1,5 @@
 import React from "react";
-import { Settings2 } from "lucide-react"; // or your icon source
+import { Settings2 } from "lucide-react";
 
 interface SelectedStackItem {
   id: string;
@@ -51,7 +51,6 @@ const OptionGrid: React.FC<Props> = ({ currentStepData, selectedStack, handleOpt
             }`}
             onClick={() => {
               handleOptionChange(currentStepData.key, option.id, currentStepData.type === "checkbox");
-              // Remove popup on select: only open editor if not selected, remove this line if you want no popup on selection
               // if (!isSelected) openEditor({ ...option, selected: true });
             }}
           >
