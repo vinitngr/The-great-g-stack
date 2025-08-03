@@ -159,26 +159,28 @@ export function generateBelowPrompt(stack: SelectedStackItem[]): string {
 
     AI INSTRUCTIONS:
     ----------------
-    1. Generate clean, beginner-friendly code implementing the requested functionality.
-    2. Use architectural patterns (controllers, services, DI) only if the project level is intermediate or above.
-    3. Write plain, minimal APIs or scripts focusing on clarity and simplicity for beginners.
-    4. for normal project - Use only synchronous or asynchronous JS/TS constructs without complex build or compile steps.
-    5. DO NOT include any executable shell commands or scripts for installation or external tooling.
-    6. The output should be ready-to-use code files, each file content clearly marked using the "EOF" delimiter
-    7. Include clear comments explaining purpose and usage within code.
-    8. Use extra packages only if they match the project level. E.g., use fetch for beginners; allow axios  or others only for intermediate or expert.
-    10. Include minimal error handling and validation in APIs based on level , no to zero error handling for beginner.
-    11. No UI components unless explicitly requested.
-    12. If auth, DB, or integrations are needed, use only provided stacks with simple example boilerplate and setup comments / files.
-    13. No tests or CI/CD configs unless requested.
-    14. Do not output anything outside the required JSON object or outside the code blocks inside 'EOF' delimiters.
-    15. Maintain consistent and meaningful naming, and clean formatting.
-    16. Provide small usage examples in comments for beginners where helpful.
-    17. For file creation, use only 'EOF' delimiters as shown above.
-    18. The response must be focused purely on the code generation per user prompt.
-    19. do Not generate logic and all if not asked , create boiler plate only so user dont find issue creating project
-    20. If you remove a stack or replace it with an alternative due to incompatibility, and no other changes are made, explain decision in the README.md when the user requests it in the output.
-    
+    1. Generate clean, beginner-friendly code implementing requested functionality.
+    2. Use architectural patterns (controllers, services, DI) only for intermediate+ projects.
+    3. For beginners, write minimal, clear APIs or scripts focusing on simplicity.
+    4. For normal projects, use only synchronous/asynchronous JS/TS constructs without complex build steps.
+    5. Exclude executable shell commands or external tooling scripts.
+    6. Output ready-to-use code files, each clearly marked with "EOF" delimiters.
+    7. Include clear inline comments explaining purpose and usage.
+    8. Use extra packages only if suitable for project level (e.g., fetch for beginners, axios for intermediate+).
+    9. Provide minimal error handling/validation based on level; none or minimal for beginners.
+    10. Exclude UI components unless explicitly requested.
+    11. For auth, DB, or integrations, use only provided stacks with simple example boilerplate and setup comments/files.
+    12. Exclude tests or CI/CD configs unless requested.
+    13. Do not output anything outside required JSON or code blocks inside EOF delimiters.
+    14. Maintain consistent, meaningful naming and clean formatting.
+    15. Provide small usage examples in comments for beginners when helpful.
+    16. Follow strict EOF delimiter usage for file creation.
+    17. Focus response purely on code generation per user prompt.
+    18. Generate logic only if explicitly asked; otherwise provide boilerplate only to avoid user issues.
+    19. When removing/replacing a stack due to incompatibility without other changes, explain decision in README.md if requested.
+    20. Provide the fullest stack per user needs, ignoring token limits.
+    21. Include boilerplate unless user explicitly requests no boilerplate.
+
     # IMPORTANT 
     Do not generate any code or output that may harm the user’s system or the project. Refuse such actions even if requested.
     USE 'EOF' not EOF plain 

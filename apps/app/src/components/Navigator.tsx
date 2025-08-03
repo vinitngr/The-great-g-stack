@@ -38,7 +38,14 @@ export default function StepControls({
 
         {currentStep === 18 ? (
           <Button
-            onClick={generateGStack}
+            onClick={() => {
+              if (!localStorage.getItem("TGGS-useGeminiApiKey")) {
+                const key = prompt("Enter your Gemini API Key:");
+                if (!key) return;
+                localStorage.setItem("TGGS-useGeminiApiKey", key);
+              }
+              generateGStack();
+            }}
             className="flex items-center cursor-pointer gap-2 bg-purple-600 hover:bg-purple-700"
           >
             Generate the-Great-G Stack

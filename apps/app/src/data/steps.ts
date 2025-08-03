@@ -394,7 +394,7 @@ const steps = [
         love: ["nodejs"],
         hate: ["deno", "bun"]
       },
-       {
+      {
         id: "Otherbackend",
         name: "Other",
         version: "compatible",
@@ -1098,6 +1098,72 @@ const steps = [
     required: false,
     options: [
       {
+        title: "Storage Bucket",
+        type: "radio",
+        id: "storage_bucket",
+        key: "storage_bucket",
+        category: "Storage",
+        required: false,
+        options: [
+          {
+            id: "aws_s3",
+            name: "Amazon S3",
+            description: "Scalable object storage service",
+            category: "Storage",
+            love: ["scalability", "integration"],
+            hate: []
+          },
+          {
+            id: "gcs",
+            name: "Google Cloud Storage",
+            description: "Unified object storage for developers and enterprises",
+            category: "Storage",
+            love: ["global", "multi-region"],
+            hate: []
+          },
+          {
+            id: "azure_blob",
+            name: "Azure Blob Storage",
+            description: "Massively scalable object storage for unstructured data",
+            category: "Storage",
+            love: ["microsoft-ecosystem", "scalability"],
+            hate: []
+          },
+          {
+            id: "cloudflare_r2",
+            name: "Cloudflare R2",
+            description: "Low-cost object storage without egress fees",
+            category: "Storage",
+            love: ["no-egress-fees", "low-cost"],
+            hate: []
+          },
+          {
+            id: "cloudinary",
+            name: "Cloudinary",
+            description: "Image and video management platform with CDN",
+            category: "Storage",
+            love: ["media-optimization", "cdn"],
+            hate: []
+          },
+          {
+            id: "digitalocean_spaces",
+            name: "DigitalOcean Spaces",
+            description: "Simple object storage with built-in CDN",
+            category: "Storage",
+            love: ["simplicity", "cdn"],
+            hate: []
+          },
+          {
+            id: "additional/storage_bucket",
+            name: "Other/Additional",
+            description: "Specify other storage bucket services",
+            category: "Storage",
+            love: [],
+            hate: []
+          }
+        ]
+      },
+      {
         title: "Logging & Monitoring",
         type: "radio",
         id: "logging_monitoring",
@@ -1145,7 +1211,7 @@ const steps = [
         id: "analytics",
         description: "Select analytics tools",
         key: "analytics",
-        name : "Analytics",
+        name: "Analytics",
         category: "Insights",
         required: false,
         options: [
@@ -1188,7 +1254,7 @@ const steps = [
         type: "checkbox",
         id: "errorHandling",
         key: "error_handling",
-        name : "Error Handling",
+        name: "Error Handling",
         category: "Resilience",
         required: false,
         options: [
@@ -1222,7 +1288,7 @@ const steps = [
         title: "Internationalization (i18n)",
         type: "checkbox",
         key: "i18n",
-        id:"i18n",
+        id: "i18n",
         name: "Internationalization",
         category: "Localization",
         required: false,
@@ -1265,7 +1331,7 @@ const steps = [
         title: "Security",
         type: "checkbox",
         key: "security",
-        id:"security",
+        id: "security",
         category: "Security",
         required: false,
         name: "Security",
