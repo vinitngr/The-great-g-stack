@@ -1,5 +1,5 @@
 import { Copy, Download, Trash } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "./ui/button";
 
 type StackData = {
@@ -11,15 +11,20 @@ type StackData = {
 };
 
 export default function StackViewer() {
-  const stackItems: StackData[] = Object.keys(localStorage)
+    const [counter, setCounter] = useState<number>(0);
+    const stackItems: (StackData & { key: string })[] = Object.keys(localStorage)
     .filter((key) => key.startsWith("stack-"))
     .map((key) => {
       try {
-        return JSON.parse(localStorage.getItem(key) || "{}") as StackData;
+        return {
+          key,
+          ...(JSON.parse(localStorage.getItem(key) || "{}") as StackData)
+        };
       } catch {
-        return { store: "", aiResult: {} };
+        return { key, store: "", aiResult: {} };
       }
     });
+
 
   const downloadFile = (filename: string, content: string) => {
     const blob = new Blob([content], { type: "text/plain" });
@@ -29,6 +34,7 @@ export default function StackViewer() {
     a.click();
     URL.revokeObjectURL(a.href);
   };
+
   const downloadZip = async (files: Record<string, string>) => {
     const JSZip = (await import("jszip")).default;
     const zip = new JSZip();
@@ -121,15 +127,11 @@ export default function StackViewer() {
               >
                 Download ZIP
               </Button>
-              <Button><Trash/></Button>
+              <Button onClick={() => {localStorage.removeItem(item.key) ; setCounter(prev => prev + 1);}}><Trash/></Button>
             </div>
           )}
         </div>
       ))}
     </div>
-
-
-
-
   );
 }

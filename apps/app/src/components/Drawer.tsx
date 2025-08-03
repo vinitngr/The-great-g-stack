@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import { Cloud, Layers, User, X } from 'lucide-react'
 import { Button } from './ui/button'
 
@@ -13,13 +13,12 @@ import UploadedStack from './UploadedStack'
 
 interface DrawerProps {
     open: boolean
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>
+    setOpen: React.Dispatch<SetStateAction<boolean>>
     aboutProject: AboutProject
-    setAboutProject: React.Dispatch<React.SetStateAction<AboutProject>>
+    setAboutProject: Dispatch<SetStateAction<AboutProject>>
 }
 
 function Drawer({ setOpen }: DrawerProps) {
-
     const [activeTab, setActiveTab] = useState("auth")
     const [githubUser, setGithubUser] = useState<any>(null)
     const [userStacks] = useState<any[]>([])
@@ -59,6 +58,20 @@ function Drawer({ setOpen }: DrawerProps) {
                         >
                             My Stacks
                         </button>
+                        {
+                            githubUser && (
+                                <button
+                                    onClick={() => setActiveTab("cli")}
+                                    className={`flex-1 px-4 py-2 text-sm font-medium ${activeTab === "cli"
+                                        ? "border-b-2 border-blue-500 text-blue-600"
+                                        : "text-gray-500 hover:text-gray-700"
+                                        }`}
+                                >
+                                    CLI/Guide
+                                </button>
+                            )
+                        }
+
                     </div>
 
                     <div className="flex-1 overflow-y-auto p-4">
@@ -120,8 +133,8 @@ function Drawer({ setOpen }: DrawerProps) {
                         {activeTab === "stacks" && (
                             <div className="space-y-2">
                                 <div className={cn(!showsavedStack && 'border rounded')}>
-                                        <div className='flex my-1 items-center cursor-pointer select-none justify-center gap-2' onClick={() => setshowsavedStack(!showsavedStack)}><Layers size={15} />Locally saved stack</div>
-                                        {showsavedStack && <StackViewer />}
+                                    <div className='flex my-1 items-center cursor-pointer select-none justify-center gap-2' onClick={() => setshowsavedStack(!showsavedStack)}><Layers size={15} />Locally saved stack</div>
+                                    {showsavedStack && <StackViewer />}
                                 </div>
 
                                 <div className="space-y-2">
@@ -132,6 +145,35 @@ function Drawer({ setOpen }: DrawerProps) {
                                 </div>
                             </div>
                         )}
+
+                        {activeTab === "cli" && (
+                            <div className="space-y-4">
+                                <h2 className="text-xl font-bold">@theggs/cli</h2>
+
+                                {[
+                                    { label: "Download package globally", cmd: "npm install -g @theggs/cli" },
+                                    { label: "Import the stack", cmd: "tggs import https://tggs.vinitnagar56.workers.dev/api/stack/StackId" },
+                                    { label: "Export the stack", cmd: "tggs export --dir ./exportedStack" }
+                                ].map(({ label, cmd }, i) => (
+                                    <div key={i}>
+                                        <p className="mb-1 font-medium">{label}</p>
+                                        <div className="relative">
+                                            <pre className="bg-gray-900 text-green-400 p-3 rounded-lg text-sm overflow-x-auto">
+                                                <code>{cmd}</code>
+                                            </pre>
+                                            <button
+                                                onClick={() => navigator.clipboard.writeText(cmd)}
+                                                className="cursor-pointer absolute top-2 right-2 bg-gray-700 hover:bg-gray-600 text-white text-xs px-2 py-1 rounded"
+                                            >
+                                                Copy
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+
                     </div>
                 </div>
             </div>
