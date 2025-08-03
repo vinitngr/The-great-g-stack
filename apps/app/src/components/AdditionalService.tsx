@@ -29,7 +29,7 @@ export default function AdditionalServices({
                     category: option.category ?? "",
                     selected: true,
                 };
-                if(newItem.name.startsWith("Other")){
+                if (newItem.name.startsWith("Other")) {
                     openEditor(newItem)
                 }
                 setAdditionalServices([...additionalServices, newItem]);
@@ -49,7 +49,6 @@ export default function AdditionalServices({
 
     return (
         <div>
-            <h2 className="font-bold mb-4">{stack.title}</h2>
             {stack.options.map((category) => (
                 <div key={category.id || category.name} className="mb-4">
                     <h3 className="font-semibold mb-2">{category.name ?? ""}</h3>
@@ -75,8 +74,8 @@ export default function AdditionalServices({
                                 <div
                                     key={option.id}
                                     className={`relative p-2 border rounded-lg transition-all cursor-pointer ${isSelected
-                                            ? "bg-indigo-50 border-indigo-500"
-                                            : "border-gray-200 hover:border-gray-300"
+                                        ? "bg-indigo-50 border-indigo-500"
+                                        : "border-gray-200 hover:border-gray-300"
                                         }`}
                                     onClick={() => toggleOption(option)}
                                 >

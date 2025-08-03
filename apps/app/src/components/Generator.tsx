@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Edit3, Save, X, Sparkles, Settings2, Layers } from 'lucide-react';
 import steps from '../data/steps';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
@@ -31,6 +31,8 @@ export interface SelectedStackItem {
   description: string;
   category: string;
   selected: boolean;
+  love?: string[];
+  hate?: string[];
 }
 
 export interface SelectedStack {
@@ -86,11 +88,16 @@ export interface Step {
   required?: boolean;
   options: StepOption[];
 }
+
 const StackGenerator = () => {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [editingOption, setEditingOption] = useState<SelectedStackItem | null>(null);
   const [tempDesc, setTempDesc] = useState('');
   const [tempVersion, setTempVersion] = useState('');
+  const [conditions, setConditions] = useState<{
+    hate: string[];
+    love: string[];
+  }>({ hate: [], love: [] });
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedStack, setSelectedStack] = useState<SelectedStack>({});
   const [showResults, setShowResults] = useState(false);
@@ -112,11 +119,8 @@ const StackGenerator = () => {
 
   const handleOptionChange = (stepKey: string, optionId: string, isMultiSelect: boolean) => {
     const currentStepData = (steps as Step[]).find(step => step.key === stepKey);
-    if (!currentStepData) {
-      return 
-    };
+    if (!currentStepData) return;
 
-    
     const option = currentStepData.options.find(opt => opt.id === optionId);
     if (!option) return;
 
@@ -126,6 +130,8 @@ const StackGenerator = () => {
       version: option.version || 'compatible',
       description: option.description,
       category: option.category || '',
+      love: option.love || [],  // Preserve love array
+      hate: option.hate || [],  // Preserve hate array
       selected: true
     };
 
@@ -140,20 +146,44 @@ const StackGenerator = () => {
         } else {
           newSelections = [...currentSelections, stackItem];
         }
-        if(stackItem.name.startsWith("Other")){
+
+        if (stackItem.name.startsWith("Other")) {
           openEditor(stackItem);
         }
         return { ...prev, [stepKey]: newSelections };
       } else {
-        if(stackItem.name.startsWith("Other")){
+        if (stackItem.name.startsWith("Other")) {
           openEditor(stackItem);
         }
         return { ...prev, [stepKey]: stackItem };
       }
     });
-    
   };
+  // More efficient conditions updater
+  useEffect(() => {
+    const hateSet = new Set<string>();
+    const loveSet = new Set<string>();
+    console.log(hateSet);
 
+    const processSelection = (selection: SelectedStackItem | SelectedStackItem[]) => {
+      if (Array.isArray(selection)) {
+        selection.forEach(opt => {
+          opt.hate?.forEach(h => hateSet.add(h));
+          opt.love?.forEach(l => loveSet.add(l));
+        });
+      } else if (selection) {
+        selection.hate?.forEach(h => hateSet.add(h));
+        selection.love?.forEach(l => loveSet.add(l));
+      }
+    };
+
+    Object.values(selectedStack).forEach(processSelection);
+
+    setConditions({
+      hate: Array.from(hateSet),
+      love: Array.from(loveSet)
+    });
+  }, [selectedStack]);
   const canProceed = () => {
     const currentStepData = steps[currentStep - 1];
     if (!currentStepData.required) return true;
@@ -351,7 +381,7 @@ const StackGenerator = () => {
             </CardHeader>
 
             <CardContent className='flex flex-col justify-between flex-1 gap-0' >
-              <div className={cn('py-2 overflow-auto', (currentStep !== 18 && currentStep !== 1) && 'h-60')}>
+              <div className={cn('py-2 overflow-auto', (currentStep !== 18 && currentStep !== 1 && currentStep !== 16) && 'h-60')}>
                 {currentStep === 1 ? (
                   <AboutProjectForm aboutProject={aboutProject} setAboutProject={setAboutProject} />
                 ) : currentStep === 16 ? (
@@ -479,6 +509,7 @@ const StackGenerator = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
                     {currentStepData.options.map((option) => {
                       if (currentStep == 16) return null;
+                      if(option?.id == undefined) return null;
                       const isSelected = currentStepData.type === 'checkbox'
                         ? (selectedStack[currentStepData.key as keyof typeof selectedStack] as SelectedStackItem[] || []).some(item => item.id === option.id)
                         : (selectedStack[currentStepData.key as keyof typeof selectedStack] as SelectedStackItem)?.id === option.id;
@@ -495,12 +526,37 @@ const StackGenerator = () => {
                         displayItem.selected = true;
                       }
 
+                      const matchesCondition = (opt: any, condition: string): boolean => {
+                        if (opt.name.startsWith("Other")) return true;
+                        const normalize = (str: string) => str.replace(/\s+/g, '').toLowerCase();
+
+                        if (condition.includes('=')) {
+                          const [key, value] = condition.split('=').map(s => normalize(s.trim()));
+                          const optValue = normalize(String(opt[key] || ''));
+                          return optValue.includes(value);   // use includes for partial match
+                        }
+
+                        return normalize(opt.id).includes(normalize(condition));  // includes here too
+                      };
+
+                      const isLoved = conditions.love.some(loveCondition =>
+                        matchesCondition(option, loveCondition)
+                      );
+
+                      const isHated = !isLoved && conditions.hate.some(hateCondition =>
+                        matchesCondition(option, hateCondition)
+                      );
+                      
                       return (
                         <div
-                          key={option.id}
-                          className={`relative p-2 border rounded-lg transition-all cursor-pointer ${isSelected ? 'bg-indigo-50 border-indigo-500' : 'border-gray-200 hover:border-gray-300'
-                            }`}
+                          key={option!.id}
+                          className={`relative p-2 border rounded-lg transition-all cursor-pointer 
+                            ${isSelected ? 'bg-indigo-50 border-indigo-500' : 'border-gray-200 hover:border-gray-300'}
+                            ${isHated ? 'opacity-50 cursor-not-allowed grayscale' : ''}
+                            ${isLoved && !option?.name?.startsWith("Other") ? 'border border-green-400' : ''}
+                          `}
                           onClick={() => {
+                            if (isHated) return;
                             handleOptionChange(currentStepData.key, option.id, currentStepData.type === 'checkbox');
                           }}
                         >
@@ -508,6 +564,7 @@ const StackGenerator = () => {
                             <input
                               type={currentStepData.type === 'checkbox' ? 'checkbox' : 'radio'}
                               checked={isSelected}
+                              disabled={isHated}
                               onChange={() => { }}
                               className="mt-1 accent-indigo-500"
                               onClick={e => e.stopPropagation()}
@@ -515,13 +572,14 @@ const StackGenerator = () => {
                             <div className="flex-1">
                               <div className="flex items-center gap-2">
                                 <h3 className="font-semibold text-gray-900">{option.name}</h3>
-                                <div className="px-2 py-0.5 bg-gray-100 rounded-full text-xs text-gray-600">{displayItem.version}</div>
-                                {/* <p className="text-gray-600 text-sm line-clamp-1">{displayItem.description}</p> */}
+                                <div className="px-2 py-0.5 bg-gray-100 rounded-full text-xs text-gray-600">
+                                  {displayItem.version}
+                                </div>
                               </div>
                             </div>
                             {isSelected && (
                               <button
-                                onClick={e => {
+                                onClick={(e) => {
                                   e.stopPropagation();
                                   openEditor(displayItem as SelectedStackItem);
                                 }}

@@ -81,7 +81,7 @@ export function generateAbovePrompt(selectedStack: SelectedStack, aboutProject: 
     All content must be valid JSON string values. Escape line breaks and quotes properly.  
     You MUST output exactly one JSON object with these keys:
 
-    - "setup.sh": full bash script starting with #!/bin/bash, creating all required files/folders except setup.sh, root package.json, README.md, guide.txt; must be executable.
+    - "setup.sh": full bash script starting with #!/bin/bash, creating all required files/folders no need to add REAME.md in setup.sh if not given in output.
 
     - "package.json": valid JSON text for root package.json.
 
