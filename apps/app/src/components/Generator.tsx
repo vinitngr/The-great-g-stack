@@ -33,6 +33,7 @@ export interface SelectedStackItem {
   selected: boolean;
   love?: string[];
   hate?: string[];
+  must?: string[]
 }
 
 export interface SelectedStack {
@@ -72,6 +73,7 @@ export interface StepOption {
   id: string;
   name: string;
   version?: string;
+  must? : string[];
   description: string;
   category?: string;
   love?: string[];
@@ -508,8 +510,8 @@ const StackGenerator = () => {
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
                     {currentStepData.options.map((option) => {
-                      if (currentStep == 16) return null;
-                      if(option?.id == undefined) return null;
+                      // if (currentStep == 16) return null;
+                      if (option?.id == undefined) return null;
                       const isSelected = currentStepData.type === 'checkbox'
                         ? (selectedStack[currentStepData.key as keyof typeof selectedStack] as SelectedStackItem[] || []).some(item => item.id === option.id)
                         : (selectedStack[currentStepData.key as keyof typeof selectedStack] as SelectedStackItem)?.id === option.id;
@@ -527,36 +529,46 @@ const StackGenerator = () => {
                       }
 
                       const matchesCondition = (opt: any, condition: string): boolean => {
-                        if (opt.name.startsWith("Other")) return true;
+                        if (opt.name.startsWith("Other")) return false;
                         const normalize = (str: string) => str.replace(/\s+/g, '').toLowerCase();
 
                         if (condition.includes('=')) {
                           const [key, value] = condition.split('=').map(s => normalize(s.trim()));
                           const optValue = normalize(String(opt[key] || ''));
-                          return optValue.includes(value);   // use includes for partial match
+                          return optValue == value;
                         }
 
-                        return normalize(opt.id).includes(normalize(condition));  // includes here too
+                        return normalize(opt.id) == normalize(condition);
                       };
 
-                      const isLoved = conditions.love.some(loveCondition =>
+                      const isHated = conditions.hate.some(hateCondition =>
+                        matchesCondition(option, hateCondition)
+                      );
+
+                      const isLoved = !isHated && conditions.love.some(loveCondition =>
                         matchesCondition(option, loveCondition)
                       );
 
-                      const isHated = !isLoved && conditions.hate.some(hateCondition =>
-                        matchesCondition(option, hateCondition)
-                      );
-                      
+                      const isMust = !(option as SelectedStackItem).must || (option as SelectedStackItem).must?.every(mustId =>
+                      Object.values(selectedStack).some(selection => {
+                        if (Array.isArray(selection)) {
+                          return selection.some(item => item.id === mustId);
+                        }
+                        return selection?.id === mustId;
+                      })
+                    );
+
                       return (
                         <div
                           key={option!.id}
-                          className={`relative p-2 border rounded-lg transition-all cursor-pointer 
+                          className={`relative p-2 border rounded-lg transition-all cursor-pointer
                             ${isSelected ? 'bg-indigo-50 border-indigo-500' : 'border-gray-200 hover:border-gray-300'}
                             ${isHated ? 'opacity-50 cursor-not-allowed grayscale' : ''}
+                            ${!isMust ? 'opacity-30 cursor-not-allowed grayscale' : ''}
                             ${isLoved && !option?.name?.startsWith("Other") ? 'border border-green-400' : ''}
                           `}
                           onClick={() => {
-                            if (isHated) return;
+                            if (isHated || !isMust) return;
                             handleOptionChange(currentStepData.key, option.id, currentStepData.type === 'checkbox');
                           }}
                         >
@@ -564,7 +576,7 @@ const StackGenerator = () => {
                             <input
                               type={currentStepData.type === 'checkbox' ? 'checkbox' : 'radio'}
                               checked={isSelected}
-                              disabled={isHated}
+                              // disabled={isHated}
                               onChange={() => { }}
                               className="mt-1 accent-indigo-500"
                               onClick={e => e.stopPropagation()}

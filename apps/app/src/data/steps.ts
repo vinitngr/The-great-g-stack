@@ -46,7 +46,7 @@ export const steps = [
     key: "runtime",
     category: "Runtime",
     required: true,
-    options: [  
+    options: [
       {
         id: "nodejs",
         name: "Node.js",
@@ -59,7 +59,7 @@ export const steps = [
           "bun-pm",
           "category=Deno Library",
           "category=Bun Library",
-          "stackType=static-site", "oak", "hono",
+          "stackType=static-site", "oak"
         ]
       },
       {
@@ -75,7 +75,7 @@ export const steps = [
           "pnpm-pm",
           "bun-pm",
           "category=Node Library",
-          "stackType=monorepo", "express", "nestjs", "vite", "deno"
+          "stackType=monorepo", "express", "nestjs", "vite"
         ]
       },
       {
@@ -109,20 +109,26 @@ export const steps = [
           "stackType=microservices"
         ]
       },
-      {
-        id: "wasm",
-        name: "WebAssembly",
-        version: "latest",
-        description: "Low-level runtime for compiled languages",
-        category: "Runtime",
-        love: [],
-        hate: [
-          "category=Frontend Framework",
-          "category=NPM Package",
-          // "stackType=frontend",
-          // "stackType=fullstack"
-        ]
-      }
+      // {
+      //   id: "wasm",
+      //   name: "WebAssembly",
+      //   version: "latest",
+      //   description: "Low-level runtime for compiled languages",
+      //   category: "Runtime",
+      //   love: [],
+      //   hate: [
+      //     "category=Backend Framework",
+      //     "category=NPM Package",
+      //     "backend",
+      //     "Serverless",
+      //     "Microservices",
+      //     "Backend-ejs",
+      //     "api-only",
+      //     "cli"
+      //     // "stackType=frontend",
+      //     // "stackType=fullstack"
+      //   ]
+      // }
     ]
   },
   {
@@ -153,7 +159,7 @@ export const steps = [
         name: "pnpm",
         version: "8.x",
         category: "Package Manager",
-        love: ["nodejs", "stackType=monorepo" , "monorepo"],
+        love: ["nodejs", "stackType=monorepo", "monorepo"],
         hate: ["deno", "bun", "runtime=wasm"]
       },
       {
@@ -185,33 +191,40 @@ export const steps = [
         id: "frontend",
         name: "Frontend Only",
         category: "Architecture",
-        love: ["react", "id=OtherDB", "firebase", "supabase"
-        ],
+        love: ["react" , "tailwindcss"],
         hate: [
           "category=Backend Framework",
-          "category=Database",
-          "runtime=wasm", 
-          "stackType=api-only",
+          "express",
+          "kao",
+          "fastify",
+          "nestjs",
+          "hono",
+          "oak",
           "category=ORM/ODM",
-          "category=auth",
+          "nextauth",
+          "auth0",
+          "jwt",
+          "passport",
+          "lucia", "category=Database"
         ]
       },
       {
         id: "backend",
         name: "Backend Only",
         category: "Architecture",
-        love: ["category=Backend Framework"],
+        love: ["express"],
         hate: [
           "category=Frontend Framework",
           "runtime=browser",
-          "category=Styling & UI"
+          "category=Styling & UI",
+          "browser"
         ]
       },
       {
         id: "fullstack",
         name: "Full Stack",
         category: "Architecture",
-        love: ['nextjs', 'nuxtjs', 'nestjs', 'remix', 'astro'],
+        love: ['nextjs' , "tailwindcss"],
         hate: []
       },
       {
@@ -219,14 +232,14 @@ export const steps = [
         name: "Monorepo",
         description: "use with turbo repo",
         category: "Architecture",
-        love: ["pnpm" , "changesets"],
+        love: ["pnpm", "changesets"],
         hate: []
       },
       {
         id: "frontendBackend",
         name: "Frontend + Backend",
         category: "Architecture",
-        love: [],
+        love: ["express", "react", "zustand", "nextjs" , "tailwindcss"],
         hate: []
       },
       {
@@ -234,24 +247,24 @@ export const steps = [
         name: "CLI tool",
         category: "Architecture",
         love: [],
-        hate: ["category=Frontend Framework", "category=Styling & UI"]
+        hate: ["category=Frontend Framework", "category=Styling & UI", "category=statemanagement"]
       },
       {
         id: "static-site",
-        name: "Static Site",
+        name: "Static Site(HTML/CSS/JS)",
         category: "Architecture",
-        love: [],
-        hate: ["category=Backend Framework", "category=Frontend Framework", "category=Database", "category=ORM/ODM", "category=Auth"]
+        love: ["plain-css"],
+        hate: ["category=Backend Framework", "category=authentication", "category=Frontend Framework", "category=Database", "category=ORM/ODM", "category=StateManagement", "category=testing", "category=Development Tools"]
       },
       {
         id: "serverless",
         name: "Serverless Backend",
         version: "",
-        description: "Backend as serverless functions (AWS Lambda, Vercel functions, Netlify , cloudflare etc..), choose based on user ask otherwise choose freely availble best and easy option",
+        description: "use framworks adaptor if they offically dont support serverless , like adaptor with express , fastify only if user say use these frameworks otherwise if nothing said then use famous serverless like hono cloudflare vercel etc",
         category: "Architecture",
         tags: ["cloud", "functions"],
-        love: ["AWS Lambda", "Vercel", "cloudflare", "Netlify", "supabase", "firebase", "GCP Cloud Functions"],
-        hate: ["category=Frontend Framework", "category=Styling & UI"]
+        love: [],
+        hate: ["category=Frontend Framework", "category=Styling & UI", "kao"]
       },
       {
         id: "microservices",
@@ -270,7 +283,7 @@ export const steps = [
         description: "Backend with template engine for frontend use , EJS if user not asked for something else",
         category: "Architecture",
         tags: ["templating", "server-rendered"],
-        love: ["Express", "EJS"],
+        love: ["Express", "EJS" , "plain-css"],
         hate: ["category=Frontend Framework"]
       },
       {
@@ -300,7 +313,7 @@ export const steps = [
         category: "Frontend Framework",
         love: [
           "vite", "nextjs", "remix",
-          "redux", "zustand"
+          "redux", "zustand" , "tailwindcss"
         ],
         hate: [
           "jquery", "angularjs"
@@ -324,7 +337,7 @@ export const steps = [
         description: "always use Angular CLI; avoid manual webpack setup",
         category: "Frontend Framework",
         love: ["angular-cli"],
-        hate: ["vite" , "jquery" , "react"]
+        hate: ["vite", "jquery", "react"]
       },
       {
         id: "svelte",
@@ -339,9 +352,10 @@ export const steps = [
         id: "nextjs",
         name: "Next.js",
         version: "14.x",
+        must: ["nodejs"],
         description: "prefer app router unless pages router is requested",
         category: "Frontend Framework",
-        love: ["react", "shadcn", "vercel", "nextauth", "zustand"],
+        love: ["react", "shadcn", "vercel", "nextauth", "zustand" , "tailwindcss"],
         hate: []
       },
       {
@@ -350,7 +364,7 @@ export const steps = [
         version: "2.x",
         description: "do not mix with Next.js conventions",
         category: "Frontend Framework",
-        love: ["react"],
+        love: ["react" , "tailwindcss"],
         hate: []
       },
       {
@@ -386,6 +400,7 @@ export const steps = [
         name: "Express.js",
         version: "4.x",
         description: "default to this for Node.js unless performance is a concern , consider creating controller , services etc but not for beginners",
+        must: ['nodejs'],
         category: "Backend Framework",
         love: ["nodejs", "passport"],
         hate: ["deno", "bun"]
@@ -403,6 +418,7 @@ export const steps = [
         id: "nestjs",
         name: "NestJS",
         version: "10.x",
+        must : ["nodejs"],
         description: "use when project structure, DI, or microservices are required",
         category: "Backend Framework",
         love: ["nodejs"],
@@ -421,6 +437,7 @@ export const steps = [
         id: "oak",
         name: "Oak",
         version: "12.x",
+        must: ["deno"],
         description: "use only for Deno; not portable to Node.js or Bun",
         category: "Backend Framework",
         love: ["deno"],
@@ -434,6 +451,15 @@ export const steps = [
         category: "Backend Framework",
         love: ["nodejs"],
         hate: ["deno", "bun"]
+      },
+      {
+        id: "workers",
+        name: "cloudflare workers",
+        version: "compatible",
+        description: "v8 based serverless function",
+        category: "Backend Framework",
+        love: ["cloudflare_r2" , "cloudflare-db" , "cloudflare"],
+        hate: ["", ""]
       },
       {
         id: "Otherbackend",
@@ -460,7 +486,7 @@ export const steps = [
         description: "use with localsetup machine || based on other stack choice use  neon of supabase if asked to choosed cloud option",
         category: "Database",
         package: ["neon", "supabase", "pg", "local", "other"],
-        love: ["relational", "json", "extensions", "supabase", "neon", "prisma", "drizzleORM"],
+        love: ["relational", "json", "extensions", "supabase", "neon", "drizzle"],
         hate: ["nosql"]
       },
       {
@@ -515,13 +541,14 @@ export const steps = [
       },
       {
         id: "cloudflare-db",
-        name: "cloudflare D1/KV",
+        name: "cloudflare D1/KV/DO",
         version: "compatible",
-        description: "add D1 or kV binding in .toml",
+        description: "add D1 or kV binding in .toml , only add if user didnt choosed anything else other then workers from other stack",
         category: "Database",
         package: ["prisma", "drizzleORM", "wrangler"],
         love: ["serverless", "cloudflare"],
-        hate: []
+        hate: [],
+        must:["workers"]
       },
       {
         id: "cassandra",
@@ -616,6 +643,7 @@ export const steps = [
         id: "mongoose",
         name: "Mongoose",
         version: "8.x",
+        must: ["mongodb" , "nodejs"],
         description: "use only with MongoDB; create schemas and connection setup files for intermediate+ projects",
         category: "ORM/ODM",
         package: ["mongoose"],
@@ -657,6 +685,7 @@ export const steps = [
         id: "nextauth",
         name: "NextAuth.js",
         version: "4.x",
+        must: ["nextjs"],
         description: "use with Next.js; create [...nextauth].js config for intermediate+ projects",
         category: "Authentication",
         package: ["next-auth"],
@@ -684,9 +713,20 @@ export const steps = [
         hate: []
       },
       {
+        id: "betterauth",
+        name: "better Auth",
+        version: "compatible",
+        description: "better auth add boiler plate code as well",
+        category: "Authentication",
+        package: ["batterauth"],
+        love: ["express"],
+        hate: []
+      },
+      {
         id: "passport",
         name: "Passport.js",
         version: "0.7",
+        must: ["nodejs"],
         description: "use with Express.js; create strategy and config files for intermediate+ projects",
         category: "Authentication",
         package: ["passport"],
@@ -931,8 +971,8 @@ export const steps = [
         hate: ["experimental", "small-community"]
       },
       {
-        id: "Other/Additional",
-        name: "Additional/Additional",
+        id: "otherstatemanagement",
+        name: "other",
         description: "Specify other state management libraries",
         category: "State Management",
         love: [],
@@ -1160,12 +1200,14 @@ export const steps = [
             description: "Incremental bundler by Vercel optimized for development speed",
             category: "Build Tool",
             love: ["nextjs"],
-            hate: []
+            hate: ["react", "vue", "svelte", "angular"],
+            must: ["nextjs"]
           },
           {
             id: "bun-build",
             name: "Bun Build",
             version: "1.x",
+            must: ['bun'],
             description: "Built-in bundler for Bun with fast performance and simple configuration",
             category: "Build Tool",
             love: ["bun"],
@@ -1429,6 +1471,7 @@ export const steps = [
             name: "Helmet",
             description: "Secure Express apps with HTTP headers",
             category: "Security",
+            must: ["express"],
             love: ["express", "headers"],
             hate: []
           },
