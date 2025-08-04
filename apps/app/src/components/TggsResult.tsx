@@ -144,7 +144,7 @@ export function ResultPage({ projectName, stackDetails, aiResult, onPublish, loa
                             const code = errObj?.error?.code || errObj?.code || "";
                             return (
                                 <div className="px-6 text-red-600 whitespace-pre-wrap">
-                                    <div>returning back to step 18 : 5 sec</div>
+                                    <div>returning back to step 18 : 3 sec</div>
                                     <strong>Error{code && ` #${code}`}:</strong> {msg}
                                 </div>
                             );
