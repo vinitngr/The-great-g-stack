@@ -24,14 +24,29 @@ type ResultProps = {
     onDownloadFolder?: () => void;
     aboutProject: AboutProject;
     error?: string;
+    setShowResult: (show: boolean) => void
 };
-export function ResultPage({ projectName, stackDetails, aiResult, onPublish, loading, aboutProject, error }: ResultProps) {
+export function ResultPage({ projectName, stackDetails, aiResult, onPublish, loading, aboutProject, error, setShowResult }: ResultProps) {
     const [activeTab, setActiveTab] = useState(Object.keys(aiResult)[0] || "");
 
     const handleCopy = () => {
         if (!activeTab) return;
         navigator.clipboard.writeText(aiResult[activeTab] || "");
     };
+
+    useEffect(() => {
+        if (!loading && error) {
+            if (error.includes("API key not valid")) {
+                localStorage.removeItem("TGGS-useGeminiApiKey");
+            }
+            const t = setTimeout(() => {
+                setShowResult(false);
+            }, 3000);
+            return () => clearTimeout(t);
+        }
+    }, [loading, error, setShowResult]);
+
+
 
     const handleDownload = () => {
         if (!activeTab) return;
@@ -46,7 +61,7 @@ export function ResultPage({ projectName, stackDetails, aiResult, onPublish, loa
 
     useEffect(() => {
         setActiveTab(Object.keys(aiResult)[0] || "");
-    } , [aiResult, loading])
+    }, [aiResult, loading])
 
 
     const handleDownloadFolder = async () => {
@@ -129,11 +144,12 @@ export function ResultPage({ projectName, stackDetails, aiResult, onPublish, loa
                             const code = errObj?.error?.code || errObj?.code || "";
                             return (
                                 <div className="px-6 text-red-600 whitespace-pre-wrap">
+                                    <div>returning back to step 18 : 5 sec</div>
                                     <strong>Error{code && ` #${code}`}:</strong> {msg}
                                 </div>
                             );
                         } catch {
-                            return <pre className="px-6 text-red-600 whitespace-pre-wrap">{error}</pre>;
+                            return <pre className="px-6 text-red-600 whitespace-pre-wrap">{error}</pre>
                         }
                     })()
                 ) : !loading && !aiResult?.['setup.sh'] ? (

@@ -346,6 +346,7 @@ const StackGenerator = () => {
         stackDetails={getAllSelectedItems()}
         onPublish={handlePublish}
         aboutProject={aboutProject}
+        setShowResult={setShowResults}
         error={errorMessage || undefined}
       />
     );
