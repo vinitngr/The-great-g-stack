@@ -1,7 +1,10 @@
 "use client"
+
+
 import React, { useState } from 'react';
 import { AboutProject, SelectedStack, SelectedStackItem } from './Generator';
 import { CopyCheckIcon, CopyIcon } from 'lucide-react';
+import level from '../data/level.json' assert { type: 'json' };
 
 type AiPromptEditorProps = {
   aiPrompt: string;
@@ -128,10 +131,8 @@ export function generateAbovePrompt(selectedStack: SelectedStack, aboutProject: 
     - ModuleFormat : ${aboutProject.moduleFormat || "esm"}
     - stackType: ${selectedStack.stackType?.name || "select based on stacks"}
     - Description: ${aboutProject.description || "No description given"}
-    - Level: ${aboutProject.level} — determines project complexity and structure:
-        • Beginner: simple structure with minimal files and folders.
-        • Intermediate: balanced complexity; more comprehensive than beginner but less than expert.
-        • Expert: advanced, enterprise-grade structure with high complexity and detailed folder organization.
+    - Level: ${aboutProject.level} — ${level[aboutProject.level ?? 'beginner'] ?? 'Level description not found'}
+
 
     - if anything is not given then use project metadata config what you like
     project consider beginner structure, for saas enterprise keep depth and structure top notch
