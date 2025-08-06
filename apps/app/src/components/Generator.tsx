@@ -21,79 +21,6 @@ import { parse } from 'jsonc-parser';
 import AdditionalServices from './AdditionalService';
 import { cn } from '@/lib/utils';
 
-type AiResult = Record<string, string>;
-
-
-export interface SelectedStackItem {
-  id: string;
-  name: string;
-  version: string;
-  description: string;
-  category: string;
-  selected: boolean;
-  love?: string[];
-  hate?: string[];
-  must?: string[];
-  services?: string[];
-  packages?: string[];
-}
-
-export interface SelectedStack {
-  language?: SelectedStackItem;
-  runtime?: SelectedStackItem;
-  stackType?: SelectedStackItem;
-  frontendFramework?: SelectedStackItem[];
-  backendFramework?: SelectedStackItem[];
-  packageManager?: SelectedStackItem;
-  database?: SelectedStackItem[];
-  orm?: SelectedStackItem;
-  authentication?: SelectedStackItem[];
-  styling?: SelectedStackItem[];
-  testing?: SelectedStackItem[];
-  buildTool?: SelectedStackItem;
-  deployment?: SelectedStackItem[];
-  monitoring?: SelectedStackItem[];
-  additionalLibraries?: SelectedStackItem[];
-  configuration?: SelectedStackItem[];
-  aiPrompt?: string;
-  customPackages?: SelectedStackItem[];
-  additionalServices?: SelectedStackItem[];
-}
-
-export type ProjectType = 'personal' | 'portfolio' | 'ecommerce' | 'healthcare' | 'education' | 'finance' | 'social' | 'entertainment' | 'productivity' | 'startup-saas' | 'enterprise' | 'logistics' | 'travel' | 'real-estate' | 'gaming' | 'blog' | 'news' | 'crypto' | 'ai' | 'iot' | 'open-source' | 'internal-tool' | 'other';
-
-export interface AboutProject {
-  projectName: string;
-  description?: string;
-  level?: 'beginner' | 'intermediate' | 'advanced' | 'expert';
-  projectType?: ProjectType;
-  moduleFormat?: 'esm' | 'cjs';
-  includeStructure?: boolean;
-  includeReadme?: boolean;
-}
-export interface StepOption {
-  id: string;
-  name: string;
-  version?: string;
-  must?: string[];
-  description: string;
-  category?: string;
-  love?: string[];
-  hate?: string[];
-  package?: string[];
-  options?: StepOption[];
-  service?: string[];
-}
-
-export interface Step {
-  title: string;
-  type: string;
-  key: string;
-  category: string;
-  required?: boolean;
-  options: StepOption[];
-}
-
 const StackGenerator = () => {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [editingOption, setEditingOption] = useState<SelectedStackItem | null>(null);
@@ -283,7 +210,7 @@ const StackGenerator = () => {
   };
 
   const [tempService, setTempService] = useState("");
-const [tempPackage, setTempPackage] = useState("");
+  const [tempPackage, setTempPackage] = useState("");
   const saveChanges = () => {
     if (!editingOption) return;
     const key = currentStepData.key as keyof typeof selectedStack;
@@ -657,18 +584,18 @@ const [tempPackage, setTempPackage] = useState("");
 
               {editingOption && (
                 <EditStackModal
-  editingOption={editingOption}
-  tempDesc={tempDesc}
-  tempVersion={tempVersion}
-  tempService={tempService}
-  tempPackage={tempPackage}
-  setTempDesc={setTempDesc}
-  setTempVersion={setTempVersion}
-  setTempService={setTempService}
-  setTempPackage={setTempPackage}
-  onCancel={() => setEditingOption(null)}
-  onSave={saveChanges}
-/>
+                  editingOption={editingOption}
+                  tempDesc={tempDesc}
+                  tempVersion={tempVersion}
+                  tempService={tempService}
+                  tempPackage={tempPackage}
+                  setTempDesc={setTempDesc}
+                  setTempVersion={setTempVersion}
+                  setTempService={setTempService}
+                  setTempPackage={setTempPackage}
+                  onCancel={() => setEditingOption(null)}
+                  onSave={saveChanges}
+                />
 
               )}
 
@@ -690,3 +617,78 @@ const [tempPackage, setTempPackage] = useState("");
 };
 
 export default StackGenerator;
+
+
+
+type AiResult = Record<string, string>;
+
+
+export interface SelectedStackItem {
+  id: string;
+  name: string;
+  version: string;
+  description: string;
+  category: string;
+  selected: boolean;
+  love?: string[];
+  hate?: string[];
+  must?: string[];
+  services?: string[];
+  packages?: string[];
+}
+
+export interface SelectedStack {
+  language?: SelectedStackItem;
+  runtime?: SelectedStackItem;
+  stackType?: SelectedStackItem;
+  frontendFramework?: SelectedStackItem[];
+  backendFramework?: SelectedStackItem[];
+  packageManager?: SelectedStackItem;
+  database?: SelectedStackItem[];
+  orm?: SelectedStackItem;
+  authentication?: SelectedStackItem[];
+  styling?: SelectedStackItem[];
+  testing?: SelectedStackItem[];
+  buildTool?: SelectedStackItem;
+  deployment?: SelectedStackItem[];
+  monitoring?: SelectedStackItem[];
+  additionalLibraries?: SelectedStackItem[];
+  configuration?: SelectedStackItem[];
+  aiPrompt?: string;
+  customPackages?: SelectedStackItem[];
+  additionalServices?: SelectedStackItem[];
+}
+
+export type ProjectType = 'personal' | 'portfolio' | 'ecommerce' | 'healthcare' | 'education' | 'finance' | 'social' | 'entertainment' | 'productivity' | 'startup-saas' | 'enterprise' | 'logistics' | 'travel' | 'real-estate' | 'gaming' | 'blog' | 'news' | 'crypto' | 'ai' | 'iot' | 'open-source' | 'internal-tool' | 'other';
+
+export interface AboutProject {
+  projectName: string;
+  description?: string;
+  level?: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+  projectType?: ProjectType;
+  moduleFormat?: 'esm' | 'cjs';
+  includeStructure?: boolean;
+  includeReadme?: boolean;
+}
+export interface StepOption {
+  id: string;
+  name: string;
+  version?: string;
+  must?: string[];
+  description: string;
+  category?: string;
+  love?: string[];
+  hate?: string[];
+  package?: string[];
+  options?: StepOption[];
+  service?: string[];
+}
+
+export interface Step {
+  title: string;
+  type: string;
+  key: string;
+  category: string;
+  required?: boolean;
+  options: StepOption[];
+}

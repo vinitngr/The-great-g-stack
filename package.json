@@ -4,17 +4,20 @@
   "description": "A powerful CLI tool to scaffold and export stack setups quickly.",
   "author": "Vinit Nagar",
   "private": true,
+  "type": "module",
   "workspaces": [
     "packages/*",
     "apps/*"
   ],
   "devDependencies": {
+    "inquirer": "^12.9.0",
     "turbo": "latest"
   },
   "packageManager": "pnpm@8.6.3",
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "import": "turbo run import"
+    "import": "turbo run import",
+    "explore" : "node scripts/scriptStep.js"
   }
 }

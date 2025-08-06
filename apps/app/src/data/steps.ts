@@ -691,7 +691,7 @@ export const steps = [
         version: "compatible",
         description: "add your db requirement ..... \nuse their own cli if available",
         category: "ORM/ODM",
-        package: ["", ""],
+        package: [],
         love: ["database", "orm"],
         hate: []
       }
@@ -779,12 +779,22 @@ export const steps = [
         hate: []
       },
       {
+        id: "clerk",
+        name: "clerk",
+        version: "compatible",
+        description: "create clerk.config.ts and adapter file; add .env keys for providers if used",
+        category: "Authentication",
+        package: ["@clerk/clerk-sdk-node", "@clerk/clerk-react"],
+        love: [],
+        hate: []
+      },
+      {
         id: "otherauth",
         name: "Other",
         version: "compatible",
         description: "add your auth requirement ..... \n",
         category: "auth",
-        package: [""],
+        package: [],
         love: ["auth", "security"],
         hate: []
       }
