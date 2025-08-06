@@ -33,7 +33,9 @@ export interface SelectedStackItem {
   selected: boolean;
   love?: string[];
   hate?: string[];
-  must?: string[]
+  must?: string[];
+  services?: string[];
+  packages?: string[];
 }
 
 export interface SelectedStack {
@@ -73,13 +75,14 @@ export interface StepOption {
   id: string;
   name: string;
   version?: string;
-  must? : string[];
+  must?: string[];
   description: string;
   category?: string;
   love?: string[];
   hate?: string[];
   package?: string[];
   options?: StepOption[];
+  service?: string[];
 }
 
 export interface Step {
@@ -107,6 +110,7 @@ const StackGenerator = () => {
   const [tempEdit, setTempEdit] = useState<{ version: string; description: string }>({ version: '', description: '' });
   const [aiResult, setAiResult] = useState<AiResult | null>(null);
   const [airesponseLoading, setairesponseLoading] = useState(false)
+
   const [aboutProject, setAboutProject] = useState<AboutProject>({
     projectName: "",
     description: "",
@@ -132,9 +136,11 @@ const StackGenerator = () => {
       version: option.version || 'compatible',
       description: option.description,
       category: option.category || '',
-      love: option.love || [],  // Preserve love array
-      hate: option.hate || [],  // Preserve hate array
-      selected: true
+      love: option.love || [],
+      hate: option.hate || [],
+      selected: true,
+      services: option.service || [],
+      packages: option.package || [],
     };
 
     setSelectedStack(prev => {
@@ -161,7 +167,7 @@ const StackGenerator = () => {
       }
     });
   };
-  // More efficient conditions updater
+
   useEffect(() => {
     const hateSet = new Set<string>();
     const loveSet = new Set<string>();
@@ -186,6 +192,8 @@ const StackGenerator = () => {
       love: Array.from(loveSet)
     });
   }, [selectedStack]);
+
+
   const canProceed = () => {
     const currentStepData = steps[currentStep - 1];
     if (!currentStepData.required) return true;
@@ -274,24 +282,59 @@ const StackGenerator = () => {
     setTempVersion(option.version);
   };
 
+  const [tempService, setTempService] = useState("");
+const [tempPackage, setTempPackage] = useState("");
   const saveChanges = () => {
     if (!editingOption) return;
     const key = currentStepData.key as keyof typeof selectedStack;
     setSelectedStack(prev => {
       if (currentStepData.type === 'checkbox') {
-        const updatedArray = ((prev[key] as SelectedStackItem[]) || []).map(item =>
-          item.id === editingOption.id
-            ? { ...item, description: tempDesc, version: tempVersion }
-            : item
-        );
+        const updatedArray = ((prev[key] as SelectedStackItem[]) || []).map(item => {
+          if (item.id !== editingOption.id) return item;
+
+          const newServices = tempService
+            ? [tempService, ...(item.services?.filter(s => s !== tempService) || [])]
+            : item.services;
+
+          const newPackages = tempPackage
+            ? [tempPackage, ...(item.packages?.filter(p => p !== tempPackage) || [])]
+            : item.packages;
+
+          return {
+            ...item,
+            description: tempDesc,
+            version: tempVersion,
+            services: newServices,
+            packages: newPackages,
+          };
+        });
         return { ...prev, [key]: updatedArray };
       } else {
-        const updatedItem = { ...(prev[key] as SelectedStackItem), description: tempDesc, version: tempVersion };
-        return { ...prev, [key]: updatedItem };
+        const item = prev[key] as SelectedStackItem;
+
+        const newServices = tempService
+          ? [tempService, ...(item.services?.filter(s => s !== tempService) || [])]
+          : item.services;
+
+        const newPackages = tempPackage
+          ? [tempPackage, ...(item.packages?.filter(p => p !== tempPackage) || [])]
+          : item.packages;
+
+        return {
+          ...prev,
+          [key]: {
+            ...item,
+            description: tempDesc,
+            version: tempVersion,
+            services: newServices,
+            packages: newPackages,
+          },
+        };
       }
     });
     setEditingOption(null);
   };
+
 
   const generateGStack = async () => {
     setShowResults(true);
@@ -551,13 +594,13 @@ const StackGenerator = () => {
                       );
 
                       const isMust = !(option as SelectedStackItem).must || (option as SelectedStackItem).must?.every(mustId =>
-                      Object.values(selectedStack).some(selection => {
-                        if (Array.isArray(selection)) {
-                          return selection.some(item => item.id === mustId);
-                        }
-                        return selection?.id === mustId;
-                      })
-                    );
+                        Object.values(selectedStack).some(selection => {
+                          if (Array.isArray(selection)) {
+                            return selection.some(item => item.id === mustId);
+                          }
+                          return selection?.id === mustId;
+                        })
+                      );
 
                       return (
                         <div
@@ -612,7 +655,23 @@ const StackGenerator = () => {
                 }
               </div>
 
-              {editingOption && <EditStackModal editingOption={editingOption} tempDesc={tempDesc} tempVersion={tempVersion} setTempDesc={setTempDesc} setTempVersion={setTempVersion} onCancel={() => setEditingOption(null)} onSave={saveChanges} />}
+              {editingOption && (
+                <EditStackModal
+  editingOption={editingOption}
+  tempDesc={tempDesc}
+  tempVersion={tempVersion}
+  tempService={tempService}
+  tempPackage={tempPackage}
+  setTempDesc={setTempDesc}
+  setTempVersion={setTempVersion}
+  setTempService={setTempService}
+  setTempPackage={setTempPackage}
+  onCancel={() => setEditingOption(null)}
+  onSave={saveChanges}
+/>
+
+              )}
+
 
               <div>
                 {currentStepData.required && !canProceed() && (

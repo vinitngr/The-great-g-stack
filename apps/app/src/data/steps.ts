@@ -1,9 +1,3 @@
-// src/data/steps.js
-
-// I've polished the hate/love rules for consistency.
-// - Removed spaces around '=' -> 'category=Backend'
-// - Corrected typos -> 'frontendFramework'
-// - Made ambiguous rules explicit -> 'category=Frontend Framework'
 export const steps = [
   {
     title: "Project Information",
@@ -18,7 +12,7 @@ export const steps = [
     type: "radio",
     key: "language",
     category: "Core Language",
-    required: true,
+    required: false,
     options: [
       {
         id: "javascript",
@@ -223,6 +217,7 @@ export const steps = [
       {
         id: "fullstack",
         name: "Full Stack",
+        description : "prefer nextjs etc ssr application if no other stack information mentioned below",
         category: "Architecture",
         love: ['nextjs', "tailwindcss"],
         hate: []
@@ -230,7 +225,7 @@ export const steps = [
       {
         id: "monorepo",
         name: "Monorepo",
-        description: "use with turbo repo",
+        description: "use with turbo repo ",
         category: "Architecture",
         love: ["pnpm", "changesets"],
         hate: []
@@ -239,6 +234,7 @@ export const steps = [
         id: "frontendBackend",
         name: "Frontend + Backend",
         category: "Architecture",
+        description: "try to create folder like frontend and backend or client or server if no other information are provided",
         love: ["express", "react", "zustand", "nextjs", "tailwindcss"],
         hate: []
       },
@@ -252,6 +248,7 @@ export const steps = [
       {
         id: "static-site",
         name: "Static Site(HTML/CSS/JS)",
+        description : "its a plain html css js project , based on project compleixity create this , try to give all in one .html file for normal small prototype otherwise for full product craete multiple files and folder based on level compelixty", 
         category: "Architecture",
         love: ["plain-css"],
         hate: ["category=Backend Framework", "category=authentication", "category=Frontend Framework", "category=Database", "category=ORM/ODM", "category=StateManagement", "category=testing", "category=Development Tools"]
@@ -484,7 +481,8 @@ export const steps = [
         version: "16.x",
         description: "use with local setup or, if cloud asked, use Neon or Supabase; create connection setup file (e.g., src/db.ts) and config if ORM not auto-handling; match driver with ORM choice",
         category: "Database",
-        package: ["neon", "supabase", "pg", "local", "other"],
+        package: ["default","pg", "slonik" , "other"],
+        service: ["default","Neon" , "local", "Supabase", "Railway", "Render", "Fly.io", "Vercel Postgres"],
         love: ["relational", "json", "extensions", "supabase", "neon", "drizzle"],
         hate: ["nosql"]
       },
@@ -494,7 +492,8 @@ export const steps = [
         version: "8.x",
         description: "default with mysql2 or Prisma client; create connection setup file if ORM not handling; if cloud needed, consider PlanetScale",
         category: "Database",
-        package: ["mysql2", "prisma"],
+        package: ["default","mysql2"],
+        service: ["default","PlanetScale", "ClearDB", "Railway", "Render"],
         love: ["relational", "performance"],
         hate: ["nosql"]
       },
@@ -504,8 +503,8 @@ export const steps = [
         version: "7.x",
         description: "use with mongoose or official mongodb driver; create models and db connection file (src/db.ts) if not handled by framework; choose Atlas if cloud option requested",
         category: "Database",
-        package: ["mongoose", "mongodb", "local", "other"],
-        love: ["nosql", "mongoose", "mysql"],
+        package: ["default","mongodb", "mongoose", "prisma"],
+        service: ["default","MongoDB Atlas", "Render", "ScaleGrid", "ObjectRocket"],
         hate: ["category=SQL"]
       },
       {
@@ -514,7 +513,8 @@ export const steps = [
         version: "7.x",
         description: "default with ioredis or redis; use for caching and sessions; create cache client setup file; use Upstash for cloud option",
         category: "Database",
-        package: ["ioredis", "redis", "upstash", "local", "other"],
+        package: ["default","ioredis", "redis", "upstash"],
+        service: ["default","Upstash", "Redis Enterprise", "Render", "Railway"],
         love: ["cache", "real-time"],
         hate: []
       },
@@ -524,8 +524,8 @@ export const steps = [
         version: "3.x",
         description: "use with better-sqlite3 or knex for local lightweight storage; create single file DB (db.sqlite) and connection file",
         category: "Database",
-        package: ["better-sqlite3", "knex"],
-        love: ["lightweight", "file-based"],
+        package: ["default","better-sqlite3", "sqlite3"],
+        service: ["default","local", "Turso"],
         hate: []
       },
       {
@@ -534,7 +534,8 @@ export const steps = [
         version: "Latest",
         description: "MySQL-compatible serverless DB; use with Prisma or planetscale packages; create prisma/schema.prisma or equivalent and handle connection string from dashboard",
         category: "Database",
-        package: ["prisma", "planetscale"],
+        package: ["default","@planetscale/database"],
+        service: ["default","PlanetScale"],
         love: ["serverless", "scalable"],
         hate: []
       },
@@ -544,18 +545,32 @@ export const steps = [
         version: "compatible",
         description: "add D1/KV binding in wrangler.toml; only pick if stack is workers and no other DB is chosen; create schema/migration file if ORM used, else handle raw SQL/kv methods",
         category: "Database",
-        package: ["prisma", "drizzleORM", "wrangler"],
+        package: ["default","wrangler"],
+        service: ["default","Cloudflare D1", "Cloudflare KV", "Durable Objects"],
         love: ["serverless", "cloudflare"],
         hate: [],
         must: ["workers"]
       },
+      {
+        id: "firebase-db",
+        name: "Firebase (Firestore/Realtime DB)",
+        version: "latest",
+        description: "NoSQL database by Google; use with Firebase SDK; works well with auth and storage; real-time updates built-in",
+        category: "Database",
+        package: ["default","firebase", "firebase-admin"],
+        service: ["default","Firebase Realtime DB", "Firebase Firestore"],
+        love: ["nosql", "realtime", "auth"],
+        hate: ["relational"]
+      }
+      ,
       {
         id: "cassandra",
         name: "Apache Cassandra",
         version: "4.x",
         description: "use cassandra-driver; create db client setup file; choose cloud providers like DataStax Astra if remote needed",
         category: "Database",
-        package: ["cassandra-driver"],
+        package: ["default","cassandra-driver"],
+        service: ["default","DataStax Astra", "ScyllaDB", "Amazon Keyspaces"],
         love: ["nosql", "distributed", "scalable"],
         hate: ["relational"]
       },
@@ -565,7 +580,8 @@ export const steps = [
         version: "latest",
         description: "PostgreSQL-compatible cloud-native DB; use with pg driver or ORM; create db connection config; handle TLS settings if required",
         category: "Database",
-        package: ["pg"],
+        package: ["default","pg"],
+        service: ["default","CockroachDB Serverless", "Cockroach Cloud"],
         love: ["relational", "scalable", "cloud-native"],
         hate: ["nosql"]
       },
@@ -575,7 +591,8 @@ export const steps = [
         version: "latest",
         description: "serverless NoSQL DB; use aws-sdk or dynamodb-doc-client; create a separate service file for read/write operations",
         category: "Database",
-        package: ["aws-sdk", "dynamodb-doc-client"],
+        package: ["default","aws-sdk", "@aws-sdk/client-dynamodb", "dynamodb-doc-client"],
+        service: ["default","AWS DynamoDB"],
         love: ["nosql", "serverless", "scalable"],
         hate: ["relational"]
       },
@@ -585,7 +602,8 @@ export const steps = [
         version: "8.x",
         description: "use @elastic/elasticsearch client; create search service file; handle index creation/mapping before queries",
         category: "Database",
-        package: ["@elastic/elasticsearch"],
+        package: ["default","@elastic/elasticsearch"],
+        service: ["default","Elastic Cloud", "Bonsai", "Searchly"],
         love: ["search", "analytics", "scalable"],
         hate: []
       },
@@ -595,7 +613,7 @@ export const steps = [
         version: "compatible",
         description: "add required DB; use their own CLI if available; create necessary config/connection/migration files as per vendor",
         category: "Database",
-        package: ["ORM", "ownCli"],
+        package: ["default","ORM", "ownCli"],
         love: ["serverless", "scalable"],
         hate: []
       }
@@ -696,7 +714,7 @@ export const steps = [
         id: "auth0",
         name: "Auth0",
         version: "Latest",
-        description:"create auth0 config file (auth0.config.js|ts) and add .env keys; document setup in README if minimal",
+        description: "create auth0 config file (auth0.config.js|ts) and add .env keys; document setup in README if minimal",
         category: "Authentication",
         package: ["auth0"],
         love: [],
