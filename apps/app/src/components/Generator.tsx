@@ -618,8 +618,6 @@ const StackGenerator = () => {
 
 export default StackGenerator;
 
-
-
 type AiResult = Record<string, string>;
 
 
@@ -670,6 +668,7 @@ export interface AboutProject {
   includeStructure?: boolean;
   includeReadme?: boolean;
 }
+
 export interface StepOption {
   id: string;
   name: string;

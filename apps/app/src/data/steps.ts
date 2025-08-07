@@ -549,7 +549,7 @@ export const steps = [
         service: ["default", "Cloudflare D1", "Cloudflare KV", "Durable Objects"],
         love: ["serverless", "cloudflare"],
         hate: [],
-        must: []
+        must: ["workers"]
       }
 
       ,
@@ -1298,6 +1298,7 @@ export const steps = [
             name: "Cloudflare R2",
             description: "Low-cost object storage without egress fees",
             category: "Storage",
+            must: ["workers"],
             love: ["no-egress-fees", "low-cost"],
             hate: []
           },
