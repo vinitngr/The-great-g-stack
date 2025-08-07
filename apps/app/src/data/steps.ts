@@ -399,6 +399,7 @@ export const steps = [
         name: "NestJS",
         version: "10.x",
         must: ["nodejs"],
+        category: "Backend Framework",
         description: "use when project structure, DI, or microservices are required; initialize with nest new; use src/modules, src/controllers, src/services",
         love: ["nodejs"],
         hate: ["deno", "bun"]

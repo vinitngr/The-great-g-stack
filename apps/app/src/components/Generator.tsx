@@ -46,7 +46,7 @@ const StackGenerator = () => {
     moduleFormat: "esm",
     includeStructure: true,
     includeReadme: true,
-    model : "gemini-2.5-flash"
+    model: "gemini-2.5-flash"
   })
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -272,7 +272,7 @@ const StackGenerator = () => {
     const prompt = getPrompt();
 
     try {
-      const res = await aiResponse(prompt , aboutProject.model || 'gemini-2.5-flash');
+      const res = await aiResponse(prompt, aboutProject.model || 'gemini-2.5-flash');
 
       let text = res?.candidates?.[0]?.content?.parts?.[0]?.text || '';
       text = text.trim().replace(/^```(?:json)?\s*/, '').replace(/```$/, '');
@@ -343,13 +343,17 @@ const StackGenerator = () => {
         <div className="max-w-4xl py-2  h-screen mx-auto flex flex-col gap-4">
           <Header />
           <StepMeter currentStep={currentStep} />
-          {getAllSelectedItems().length > 0 && currentStep !== 18 && <SelectedStackPrew selectedStack={getAllSelectedItems()} />}
+          {getAllSelectedItems().length > 0 && currentStep !== 18 && <SelectedStackPrew setcurrentStep={setCurrentStep} selectedStack={getAllSelectedItems()} />}
 
           <Card className='flex-1 gap-2 relative'>
             <CardHeader className="flex-shrink-0 gap-0">
               <CardTitle className="flex items-center gap-1 text-lg">
                 <div className='flex gap-2 items-center'>{currentStep == 18 && <Sparkles className="h-5 w-5 text-purple-500" />} {currentStepData.title}</div>
-
+                {currentStepData.required && !canProceed() && (
+                  <div className='text-red-500'>
+                  *
+                  </div>
+                )}
               </CardTitle>
               <CardDescription className="text-sm">{currentStepData.category}</CardDescription>
             </CardHeader>
@@ -602,11 +606,6 @@ const StackGenerator = () => {
 
 
               <div>
-                {currentStepData.required && !canProceed() && (
-                  <div className="mt-2 p-3 bg-yellow-50 border-l-4 border-yellow-400 rounded">
-                    <p className="text-yellow-700 text-sm">This field is required to continue.</p>
-                  </div>
-                )}
                 <StepControls setAboutProject={setAboutProject} aboutProject={aboutProject} currentStep={currentStep} prevStep={prevStep} nextStep={nextStep} generateGStack={generateGStack} />
               </div>
             </CardContent>
