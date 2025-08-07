@@ -45,7 +45,8 @@ const StackGenerator = () => {
     projectType: "personal",
     moduleFormat: "esm",
     includeStructure: true,
-    includeReadme: true
+    includeReadme: true,
+    model : "gemini-2.5-flash"
   })
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -271,7 +272,7 @@ const StackGenerator = () => {
     const prompt = getPrompt();
 
     try {
-      const res = await aiResponse(prompt);
+      const res = await aiResponse(prompt , aboutProject.model || 'gemini-2.5-flash');
 
       let text = res?.candidates?.[0]?.content?.parts?.[0]?.text || '';
       text = text.trim().replace(/^```(?:json)?\s*/, '').replace(/```$/, '');
@@ -606,7 +607,7 @@ const StackGenerator = () => {
                     <p className="text-yellow-700 text-sm">This field is required to continue.</p>
                   </div>
                 )}
-                <StepControls currentStep={currentStep} prevStep={prevStep} nextStep={nextStep} generateGStack={generateGStack} />
+                <StepControls setAboutProject={setAboutProject} aboutProject={aboutProject} currentStep={currentStep} prevStep={prevStep} nextStep={nextStep} generateGStack={generateGStack} />
               </div>
             </CardContent>
           </Card>
@@ -667,6 +668,7 @@ export interface AboutProject {
   moduleFormat?: 'esm' | 'cjs';
   includeStructure?: boolean;
   includeReadme?: boolean;
+  model?: string;
 }
 
 export interface StepOption {

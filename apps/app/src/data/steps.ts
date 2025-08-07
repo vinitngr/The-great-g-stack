@@ -100,29 +100,11 @@ export const steps = [
           "category=Database",
           "stackType=backend",
           "stackType=api-only",
-          "stackType=microservices"
+          "stackType=microservices",
+          "backend" , "fullstack" , "monorepo" , "frontendBackend",
+          "cli" ,"serverless", "microservices" , "backend-ejs", "api-only"
         ]
       },
-      // {
-      //   id: "wasm",
-      //   name: "WebAssembly",
-      //   version: "latest",
-      //   description: "Low-level runtime for compiled languages",
-      //   category: "Runtime",
-      //   love: [],
-      //   hate: [
-      //     "category=Backend Framework",
-      //     "category=NPM Package",
-      //     "backend",
-      //     "Serverless",
-      //     "Microservices",
-      //     "Backend-ejs",
-      //     "api-only",
-      //     "cli"
-      //     // "stackType=frontend",
-      //     // "stackType=fullstack"
-      //   ]
-      // }
     ]
   },
   {
@@ -225,6 +207,7 @@ export const steps = [
       {
         id: "monorepo",
         name: "Monorepo",
+        link : ["docsLibrary" , "frontendFramework" , "backendFramework"],
         description: "use with turbo repo ",
         category: "Architecture",
         love: ["pnpm", "changesets"],
@@ -233,6 +216,7 @@ export const steps = [
       {
         id: "frontendBackend",
         name: "Frontend + Backend",
+        link : ["frontendFramework" , "backendFramework"],
         category: "Architecture",
         description: "try to create folder like frontend and backend or client or server if no other information are provided",
         love: ["express", "react", "zustand", "nextjs", "tailwindcss"],
@@ -309,7 +293,7 @@ export const steps = [
         description: "use react with vite unless specified",
         category: "Frontend Framework",
         love: [
-          "vite", "nextjs", "remix",
+          "vite",
           "redux", "zustand", "tailwindcss"
         ],
         hate: [
@@ -351,7 +335,7 @@ export const steps = [
         version: "14.x",
         description: "prefer app router unless pages router is requested",
         category: "Frontend Framework",
-        love: ["react", "shadcn", "vercel", "nextauth", "zustand", "tailwindcss"],
+        love: ["shadcn", "vercel", "nextauth", "zustand", "tailwindcss"],
         hate: []
       },
       {
@@ -360,7 +344,7 @@ export const steps = [
         version: "2.x",
         description: "do not mix with Next.js conventions",
         category: "Frontend Framework",
-        love: ["react", "tailwindcss"],
+        love: ["tailwindcss"],
         hate: []
       },
       {
@@ -451,9 +435,10 @@ export const steps = [
         id: "workers",
         name: "Cloudflare Workers",
         version: "compatible",
+        package: ["default", "native", "hono"],
         description: "V8-based serverless functions. Requires wrangler.toml with main entry. Add bindings if using DO/ KV etc.",
         category: "Backend Framework",
-        love: ["cloudflare_r2", "cloudflare-db", "cloudflare"],
+        love: ["cloudflare_r2", "cloudflare-db", "cloudflare" ,"hono"],
         hate: []
       },
       {
@@ -627,7 +612,7 @@ export const steps = [
   },
   {
     title: "ORM/ODM",
-    type: "radio",
+    type: "checkbox",
     key: "orm",
     category: "ORM/ODM",
     description: "for Orm = cli command and necessary files if choosen , also add how to use in guide if its a beginner or intermediate level project",
@@ -1025,7 +1010,8 @@ export const steps = [
         id: "vercel",
         name: "Vercel",
         version: "Latest",
-        description: "use with Next.js; create/vercel.json if missing, else document in README",
+        description: "Deploy Next.js apps with optional vercel.json config. Creates API routes based on stack: 'hono' creates Hono API, 'nextjs' creates Next.js API routes, 'vercel.json' creates custom api folder. Without selection, used for hosting Next.js frontend only.",
+        package: ["none", "vercel.json", "nextjs", "hono"],
         category: "Deployment",
         love: ["nextjs"],
         hate: []
@@ -1183,9 +1169,9 @@ export const steps = [
     category: "Additional",
     required: false,
     options: [
-
       {
         title: "Build Tool",
+        name: "Build Tools",
         type: "radio",
         key: "buildTool",
         category: "Build Tool",
@@ -1258,6 +1244,86 @@ export const steps = [
           }
         ]
       },
+      {
+        "title": "Docs Library",
+        "name": "Documentation Libraries",
+        "type": "radio",
+        "key": "docsLibrary",
+        "category": "Documentation",
+        "required": false,
+        "options": [
+          {
+            "id": "docusaurus",
+            "name": "Docusaurus",
+            "version": "2.x",
+            "description": "Popular React-based static site generator for documentation, supports versioning and plugins",
+            "category": "Documentation",
+            "love": ["mdx", "react", "versioning", "plugins"],
+            "hate": [],
+            "weight": "medium"
+          },
+          {
+            "id": "vuepress",
+            "name": "VuePress",
+            "version": "2.x",
+            "description": "Vue-powered static site generator with fast builds and Markdown-centric content",
+            "category": "Documentation",
+            "love": ["vue", "markdown", "ssg"],
+            "hate": [],
+            "weight": "medium"
+          },
+          {
+            "id": "mkdocs",
+            "name": "MkDocs",
+            "version": "1.x",
+            "description": "Lightweight Python-based static site generator for project docs, simple and fast",
+            "category": "Documentation",
+            "love": ["python", "markdown", "simple"],
+            "hate": [],
+            "weight": "light"
+          },
+          {
+            "id": "docsify",
+            "name": "Docsify",
+            "version": "4.x",
+            "description": "Lightweight, no-build-step SPA documentation generator, loads Markdown dynamically",
+            "category": "Documentation",
+            "love": ["javascript", "markdown", "SPA", "lightweight"],
+            "hate": [],
+            "weight": "light"
+          },
+          {
+            "id": "minify",
+            "name": "Minify Docs",
+            "version": "1.x",
+            "description": "Minimal and lightweight static documentation generator focused on speed and simplicity",
+            "category": "Documentation",
+            "love": ["speed", "minimal", "lightweight"],
+            "hate": [],
+            "weight": "light"
+          },
+          {
+            "id": "gitbook",
+            "name": "GitBook",
+            "version": "4.x",
+            "description": "Collaborative documentation platform with Markdown support and hosting",
+            "category": "Documentation",
+            "love": ["collaboration", "markdown", "hosting"],
+            "hate": [],
+            "weight": "medium"
+          },
+          {
+            "id": "otherDocs",
+            "name": "Other",
+            "version": "compatible",
+            "description": "Add your documentation library requirement ...",
+            "category": "Documentation",
+            "love": ["docs", "markdown"],
+            "hate": [],
+            "weight": "variable"
+          }
+        ]
+      }
       ,
       {
         title: "Storage Bucket",
@@ -1297,6 +1363,7 @@ export const steps = [
             name: "Cloudflare R2",
             description: "Low-cost object storage without egress fees",
             category: "Storage",
+            packages: ["default", "native", "hono"],
             must: ["workers"],
             love: ["no-egress-fees", "low-cost"],
             hate: []
