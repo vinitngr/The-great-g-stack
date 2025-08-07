@@ -15,6 +15,11 @@ function SelectedStackPrew({ selectedStack, setcurrentStep }: SelectedStackPrewP
             </CardHeader>
             <CardContent>
                 <div className="flex flex-wrap gap-2">
+                    <Badge
+                        onClick={() => setcurrentStep(1)}
+                        variant="secondary" className="text-xs cursor-pointer select-none bg-black  text-white border border-gray-300">
+                        start : metadata
+                    </Badge>
                     {selectedStack.map((key: SelectedStackItem) => {
                         return (
                             <Badge
@@ -28,6 +33,11 @@ function SelectedStackPrew({ selectedStack, setcurrentStep }: SelectedStackPrewP
                             </Badge>
                         )
                     })}
+                    <Badge
+                        onClick={() => setcurrentStep(18)}
+                        variant="secondary" className="text-xs cursor-pointer select-none bg-black text-white border border-gray-300">
+                        End : prompt
+                    </Badge>
                 </div>
             </CardContent>
         </Card>
@@ -51,6 +61,14 @@ const categorystep: Record<string, number> = {
     "State Management": 13,
     "Deployment": 14,
     "Development Tools": 15,
-    "Additional": 16,
+    "Storage": 16,
+    "Build Tool": 16,
+    "Documentation": 16,
+    "Observability": 16,
+    "Insights": 16,
+    "Resilience": 16,
+    "Security": 16,
+    "Localization": 16,
+    "Payments": 16,
     "Utilities": 17,
 }

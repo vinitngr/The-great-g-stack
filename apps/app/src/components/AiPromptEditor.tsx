@@ -18,8 +18,8 @@ export default function AiPromptEditor({ aiPrompt, setAiPrompt, stack, selectedS
   const [showAbove, setShowAbove] = useState(false);
   const [showBelow, setShowBelow] = useState(false);
   const [copied, setCopied] = useState(false);
-  console.log(aboutProject);
   const fullPrompt = `${generateAbovePrompt(selectedStack, aboutProject)}\n${aiPrompt}\n${generateBelowPrompt(stack)}`;
+
   const handleCopy = async () => {
     await navigator.clipboard.writeText(fullPrompt);
     setCopied(true);
@@ -53,9 +53,9 @@ export default function AiPromptEditor({ aiPrompt, setAiPrompt, stack, selectedS
         onClick={() => setShowBelow(prev => !prev)}
       >
         {showBelow ? (
-          <div>Below Prompt... (click to expand)</div>
-        ) : (
           <pre className='overflow-x-auto'>{generateBelowPrompt(stack)}</pre>
+        ) : (
+          <div>Below Prompt... (click to expand)</div>
         )}
       </div>
 
