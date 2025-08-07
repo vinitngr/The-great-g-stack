@@ -349,7 +349,6 @@ export const steps = [
         id: "nextjs",
         name: "Next.js",
         version: "14.x",
-        must: ["nodejs"],
         description: "prefer app router unless pages router is requested",
         category: "Frontend Framework",
         love: ["react", "shadcn", "vercel", "nextauth", "zustand", "tailwindcss"],

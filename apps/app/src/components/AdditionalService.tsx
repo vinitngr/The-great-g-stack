@@ -97,7 +97,7 @@ export default function AdditionalServices({
                                                     </div>
                                                 )}
                                             </div>
-                                            {displayItem.description && (
+                                            {displayItem?.description && (
                                                 <p className="text-gray-600 text-sm line-clamp-1">{displayItem.description}</p>
                                             )}
                                         </div>

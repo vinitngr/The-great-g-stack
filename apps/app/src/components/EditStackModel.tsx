@@ -68,7 +68,7 @@ export default function EditStackModal({
             />
           </div>
 
-          {editingOption.services!.length > 0 && (
+          {(editingOption.services ?? []).length > 0 && (
             <div className="space-y-2.5">
               <Label className="flex items-center gap-1.5 text-sm font-medium">
                 <DatabaseIcon className="w-4 h-4 opacity-70" />
@@ -97,7 +97,7 @@ export default function EditStackModal({
             </div>
           )}
 
-          {editingOption.packages!.length > 0 && (
+          {(editingOption.packages ?? []).length > 0 && (
             <div className="space-y-2.5">
               <Label className="flex items-center gap-1.5 text-sm font-medium">
                 <DatabaseIcon className="w-4 h-4 opacity-70" />
