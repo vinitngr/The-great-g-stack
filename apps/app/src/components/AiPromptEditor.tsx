@@ -97,19 +97,14 @@ Each value must be a string preserving formatting.
 Strictly follow this format to avoid JSON parse errors.  
 Failure to comply results in broken or invalid JSON that cannot be parsed by clients.
 ${aboutProject.includeStructure ? `
-Example 'structure.txt' format:
-/
-├── frontend/
-│   ├── index.html
-│   └── src/
-│       └── main.jsx
-├── backend/
-│   ├── src/
-│   │   └── server.js
-│   └── package.json
-├── setup.sh
-├── package.json
-└── README.md
+Example 'structure.txt' format: (instead of folder files we have real file and folder name)
+\/projectName
+  ├── files12\/folder12
+  ├── folder2\/
+      ├── folder21\/
+      │   └── files21
+      └── files22
+
 ` : ``}
 Strictly follow this format.
 ------------------------------------------------------------------------
