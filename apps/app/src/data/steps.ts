@@ -189,6 +189,7 @@ export const steps = [
         name: "Backend Only",
         category: "Architecture",
         love: ["express"],
+        description : "{\"beginner\":\"Create a basic backend service with REST APIs. Organize code into folders for routes, controllers, and models. Keep configurations simple and include a README.\",\"intermediate\":\"Structure the backend with clear separation of concerns: configs, routes, controllers, services, and models. Add environment management and error handling. Use Docker for containerization.\",\"advanced\":\"Implement modular services with layered architecture, incorporate middleware, authentication, validation, and logging. Use environment-based configs and automated tests. Prepare for CI/CD pipelines.\",\"expert\":\"Design scalable, maintainable backend architecture with microservices or domain-driven design. Integrate observability tools (metrics, tracing), advanced security, and deployment automation. Use container orchestration.\"}",
         hate: [
           "category=Frontend Framework",
           "runtime=browser",
@@ -199,7 +200,7 @@ export const steps = [
       {
         id: "fullstack",
         name: "Full Stack",
-        description: "prefer nextjs etc ssr application if no other stack information mentioned below",
+        description: "{\"beginner\":\"Build a basic full-stack app with frontend and backend folders. Prefer SSR frameworks like Next.js. Keep styling simple with Tailwind CSS.\",\"intermediate\":\"Structure frontend and backend clearly; use Next.js for SSR and Tailwind CSS for styling. Setup API routes and shared config. Add environment configs and basic testing.\",\"advanced\":\"Implement modular full-stack architecture using Next.js features like API routes, middleware, and incremental static regeneration. Use advanced styling and state management. Prepare for CI/CD.\",\"expert\":\"Design scalable full-stack apps with micro frontends, backend services, and deployment pipelines. Use monorepos with Turborepo, advanced caching, monitoring, and observability.\"}",
         category: "Architecture",
         love: ['nextjs', "tailwindcss"],
         hate: []
@@ -208,7 +209,7 @@ export const steps = [
         id: "monorepo",
         name: "Monorepo",
         link : ["docsLibrary" , "frontendFramework" , "backendFramework"],
-        description: "use with turbo repo ",
+        description: "{\"beginner\":\"Use Turborepo to manage multiple packages in one repo. Organize code into packages like frontend, backend, and shared libs.\",\"intermediate\":\"Set up Turborepo with pnpm workspaces and changesets. Configure build pipelines and caching. Organize packages logically.\",\"advanced\":\"Implement sophisticated caching, incremental builds, and dependency graph optimizations in Turborepo. Automate versioning and publishing with changesets.\",\"expert\":\"Design and maintain large-scale monorepos with multiple teams, enforce code ownership, integrate advanced CI/CD, and optimize build and deployment performance.\"}",
         category: "Architecture",
         love: ["pnpm", "changesets"],
         hate: []
@@ -218,7 +219,7 @@ export const steps = [
         name: "Frontend + Backend",
         link : ["frontendFramework" , "backendFramework"],
         category: "Architecture",
-        description: "try to create folder like frontend and backend or client or server if no other information are provided",
+        description:"{\"beginner\":\"Create separate folders for frontend and backend (or client/server). Keep each simple and independent with basic routing and APIs.\",\"intermediate\":\"Structure frontend and backend clearly, use React or Next.js for frontend, Express or similar for backend. Setup environment configs and shared utilities.\",\"advanced\":\"Implement shared types/interfaces between frontend and backend. Add authentication, state management, and testing. Prepare for CI/CD.\",\"expert\":\"Architect scalable apps with clear domain boundaries, microservices backend, and modular frontend. Use advanced deployment strategies and observability.\"}",
         love: ["express", "react", "zustand", "nextjs", "tailwindcss"],
         hate: []
       },
@@ -226,13 +227,14 @@ export const steps = [
         id: "cli",
         name: "CLI tool",
         category: "Architecture",
+        description : "{\"beginner\":\"Build simple CLI tools with minimal dependencies. Organize code into commands and utils. Provide clear help and usage info.\",\"intermediate\":\"Structure CLI with subcommands, config files, and input validation. Add logging and error handling.\",\"advanced\":\"Implement plugins/extensions, argument parsing libraries, and testing. Automate publishing and versioning.\",\"expert\":\"Design scalable CLI ecosystems with modular commands, telemetry, advanced configuration, and cross-platform support.\"}",
         love: [],
         hate: ["category=Frontend Framework", "category=Styling & UI", "category=statemanagement"]
       },
       {
         id: "static-site",
         name: "Static Site(HTML/CSS/JS)",
-        description: "its a plain html css js project , based on project compleixity create this , try to give all in one .html file for normal small prototype otherwise for full product craete multiple files and folder based on level compelixty",
+        description: "{\"beginner\":\"Create a single HTML file with embedded CSS and JS for simple prototypes.\",\"intermediate\":\"Organize static assets into folders, split HTML, CSS, JS files for maintainability. Use semantic HTML.\",\"advanced\":\"Implement modular CSS, JS bundling, and performance optimizations. Structure folders by components or pages.\",\"expert\":\"Design highly optimized static sites with automation tools, CI/CD for deployment, accessibility, and SEO best practices.\"}",
         category: "Architecture",
         love: ["plain-css"],
         hate: ["category=Backend Framework", "category=authentication", "category=Frontend Framework", "category=Database", "category=ORM/ODM", "category=StateManagement", "category=testing", "category=Development Tools"]
@@ -241,7 +243,7 @@ export const steps = [
         id: "serverless",
         name: "Serverless Backend",
         version: "",
-        description: "use framworks adaptor if they offically dont support serverless , like adaptor with express , fastify only if user say use these frameworks otherwise if nothing said then use famous serverless like hono cloudflare vercel etc",
+        description: "{\"beginner\":\"Use popular serverless platforms like Vercel or Cloudflare Workers with minimal setup.\",\"intermediate\":\"Integrate frameworks with serverless adapters (Express, Fastify) when official support is missing.\",\"advanced\":\"Optimize cold starts, handle environment variables securely, and implement monitoring.\",\"expert\":\"Design complex serverless architectures with microservices, event-driven functions, CI/CD pipelines, and observability.\"}",
         category: "Architecture",
         tags: ["cloud", "functions"],
         love: [],
@@ -251,7 +253,7 @@ export const steps = [
         id: "microservices",
         name: "Microservices",
         version: "",
-        description: "Multiple small services, separated backend APIs communicating via HTTP or messaging",
+        description: "{\"beginner\":\"Build multiple small backend services focused on single responsibilities. Each service should have its own folder, containing code, configs, and tests. Use simple HTTP APIs for communication.\",\"intermediate\":\"Structure each microservice with layered architecture: controllers, services, repositories. Use Docker for containerization and Docker Compose for local orchestration. Implement basic inter-service communication using REST or messaging queues.\",\"advanced\":\"Adopt event-driven communication with message brokers like RabbitMQ or Kafka. Design services for scalability and fault tolerance. Use Kubernetes for container orchestration and service discovery. Implement centralized logging and monitoring.\",\"expert\":\"Design a fully distributed microservices ecosystem with domain-driven design. Use advanced patterns like CQRS, Saga for distributed transactions. Implement zero-downtime deployments, autoscaling, security policies, and observability with tracing, metrics, and alerting. Automate CI/CD pipelines for independent service deployment.\"}",
         category: "Architecture",
         tags: ["distributed", "scalable"],
         love: ["Docker", "Kubernetes", "RabbitMQ", "docker compose"],
@@ -261,7 +263,7 @@ export const steps = [
         id: "backend-ejs",
         name: "Backend with EJS",
         version: "",
-        description: "Backend with template engine for frontend use , EJS if user not asked for something else",
+        description: "{\"beginner\":\"Create a backend service using Express with EJS as the templating engine. Organize views, routes, and static assets clearly. Keep styling simple with plain CSS.\",\"intermediate\":\"Structure code into controllers, routes, and views. Use partials and layouts in EJS for reusable components. Add environment-based configs and error handling.\",\"advanced\":\"Implement middleware for authentication, validation, and logging. Use advanced EJS features and dynamic content rendering. Write tests and prepare for Docker deployment.\",\"expert\":\"Design scalable server-rendered applications with modular architecture. Integrate security best practices, caching strategies, and CI/CD pipelines. Optimize for performance and maintainability.\"}",
         category: "Architecture",
         tags: ["templating", "server-rendered"],
         love: ["Express", "EJS", "plain-css"],
@@ -271,7 +273,7 @@ export const steps = [
         id: "api-only",
         name: "API Only",
         version: "",
-        description: "Backend focused on REST or GraphQL API without frontend , create config files and provide support through cli aswell in this case",
+        description:  "{\"beginner\":\"Build a backend focused purely on REST or GraphQL APIs. Organize routes, controllers, and schema definitions clearly. Include basic config files.\",\"intermediate\":\"Add CLI support for managing the service. Structure code with separation of concerns and environment configs. Implement validation and error handling.\",\"advanced\":\"Implement authentication, rate limiting, and detailed logging. Support GraphQL with Apollo or similar. Add comprehensive tests and Docker support.\",\"expert\":\"Architect scalable headless backend services with modular APIs. Integrate advanced monitoring, observability, and automated CI/CD. Prepare for multi-tenant and microservice deployments.\"}",
         category: "Architecture",
         tags: ["api", "headless"],
         love: ["Express", "Fastify", "Apollo"],
@@ -304,7 +306,7 @@ export const steps = [
         id: "vue",
         name: "Vue.js",
         version: "3.x",
-        description: "prefer Vite over Vue CLI",
+        description: "prefer Vite over Vue CLI , follow folder officially provided folder structure and keep complexity and depth of structure based on level ",
         category: "Frontend Framework",
         love: [
           "vite", "nuxt"
@@ -334,6 +336,7 @@ export const steps = [
         name: "Next.js",
         version: "14.x",
         description: "prefer app router unless pages router is requested",
+        
         category: "Frontend Framework",
         love: ["shadcn", "vercel", "nextauth", "zustand", "tailwindcss"],
         hate: []

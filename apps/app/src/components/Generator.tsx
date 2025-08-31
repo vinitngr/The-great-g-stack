@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
-import React, { useEffect, useState } from 'react';
-import { Edit3, Save, X, Sparkles, Settings2, Layers } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Edit3, Save, X, Sparkles, Settings2, Layers, Loader } from 'lucide-react';
 import steps from '../data/steps';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { TooltipProvider } from './ui/tooltip';
@@ -13,11 +13,10 @@ import SelectedStackPrew from './SelectedStackPrew';
 import AiPromptEditor, { generateAbovePrompt, generateBelowPrompt } from './AiPromptEditor';
 import AboutProjectForm from './FirstStep';
 import CustomPackage from './CustomPackage';
-import { aiResponse } from '@/lib/aiGenerate';
+import { aiResponseStream } from '@/lib/aiGenerate';
 import { ResultPage } from './TggsResult';
 import { Button } from './ui/button';
 import Drawer from './Drawer';
-import { parse } from 'jsonc-parser';
 import AdditionalServices from './AdditionalService';
 import { cn } from '@/lib/utils';
 
@@ -264,44 +263,108 @@ const StackGenerator = () => {
   };
 
 
-  const generateGStack = async () => {
-    setShowResults(true);
+  // const generateGStack = async () => {
+  //   setShowResults(true);
+  //   setairesponseLoading(true);
+  //   setErrorMessage(null);
+
+  //   const prompt = getPrompt();
+
+  //   try {
+  //     const res = await aiResponse(prompt, aboutProject.model || 'gemini-2.5-flash');
+
+  //     let text = res?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  //     text = text.trim().replace(/^```(?:json)?\s*/, '').replace(/```$/, '');
+
+  //     const firstBrace = text.indexOf('{');
+  //     const lastBrace = text.lastIndexOf('}');
+  //     if (firstBrace === -1 || lastBrace === -1) {
+  //       setAiResult({});
+  //       setErrorMessage('No valid JSON braces found in response');
+  //       return;
+  //     }
+
+  //     const jsonSubstring = text.slice(firstBrace, lastBrace + 1);
+
+  //     try {
+  //       const parsed = parse(jsonSubstring, [], { allowTrailingComma: true, disallowComments: false });
+  //       parsed.prompt = prompt;
+  //       setAiResult(parsed);
+  //     } catch (err) {
+  //       setErrorMessage((err as Error)?.message || 'Failed to parse AI response');
+  //       setAiResult({ prompt });
+  //     }
+  //   } catch (err: any) {
+  //     setErrorMessage(err?.message || 'Failed to fetch AI response');
+  //     setAiResult({});
+  //   } finally {
+  //     setairesponseLoading(false);
+  //   }
+  // };
+
+  const [gettingStream, setGettingStream] = useState(false);
+  const [output, setOutput] = useState('');
+
+  const outputRef = useRef('');
+  async function generateGStackstream() {
+    setShowResults(false);
     setairesponseLoading(true);
     setErrorMessage(null);
+    setGettingStream(true);
+    outputRef.current = '';
+    setOutput('');
+
+    const flush = setInterval(() => {
+      if (outputRef.current !== '') setOutput(outputRef.current);
+    }, 50);
 
     const prompt = getPrompt();
+    const model = aboutProject.model || 'gemini-2.5-flash';
 
     try {
-      const res = await aiResponse(prompt, aboutProject.model || 'gemini-2.5-flash');
+      const finalText = await aiResponseStream(prompt, model, (chunk) => {
+        outputRef.current += chunk;
+      });
 
-      let text = res?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-      text = text.trim().replace(/^```(?:json)?\s*/, '').replace(/```$/, '');
-
-      const firstBrace = text.indexOf('{');
-      const lastBrace = text.lastIndexOf('}');
-      if (firstBrace === -1 || lastBrace === -1) {
-        setAiResult({});
-        setErrorMessage('No valid JSON braces found in response');
-        return;
-      }
-
-      const jsonSubstring = text.slice(firstBrace, lastBrace + 1);
+      clearInterval(flush);
+      setGettingStream(false);
 
       try {
-        const parsed = parse(jsonSubstring, [], { allowTrailingComma: true, disallowComments: false });
+        const parsed = JSON.parse(finalText);
         parsed.prompt = prompt;
         setAiResult(parsed);
-      } catch (err) {
-        setErrorMessage((err as Error)?.message || 'Failed to parse AI response');
+        setShowResults(true);
+      } catch {
+        setErrorMessage('Failed to parse streamed JSON');
         setAiResult({ prompt });
       }
     } catch (err: any) {
-      setErrorMessage(err?.message || 'Failed to fetch AI response');
+      clearInterval(flush);
+      setGettingStream(false);
+      setErrorMessage(err?.message || 'Stream error');
       setAiResult({});
     } finally {
       setairesponseLoading(false);
+      setShowResults(true);
     }
-  };
+  }
+
+
+  if (gettingStream) {
+    return (
+      <div className='fixed top-0 bg-black left-0 w-full h-full flex flex-col justify-center items-center backdrop-blur-lg z-50'>
+        <div className='text-white/70 p-2  flex items-center justify-center gap-5 pb-3'>Ai is generating your G-stack <Loader className='animate-spin'/></div>
+        <pre
+          className="h-full w-1/2 p-4 text-white/30 overflow-y-scroll scrollbar-hide whitespace-pre-wrap break-words"
+          ref={(el) => {
+            if (el) el.scrollTop = el.scrollHeight;
+          }}
+        >
+          result : {output}
+        </pre>
+      </div>
+    )
+  }
 
 
   const handlePublish = () => {
@@ -351,7 +414,7 @@ const StackGenerator = () => {
                 <div className='flex gap-2 items-center'>{currentStep == 18 && <Sparkles className="h-5 w-5 text-purple-500" />} {currentStepData.title}</div>
                 {currentStepData.required && !canProceed() && (
                   <div className='text-red-500'>
-                  *
+                    *
                   </div>
                 )}
               </CardTitle>
@@ -603,10 +666,8 @@ const StackGenerator = () => {
                 />
 
               )}
-
-
               <div>
-                <StepControls setAboutProject={setAboutProject} aboutProject={aboutProject} currentStep={currentStep} prevStep={prevStep} nextStep={nextStep} generateGStack={generateGStack} />
+                <StepControls setAboutProject={setAboutProject} aboutProject={aboutProject} currentStep={currentStep} prevStep={prevStep} nextStep={nextStep} generateGStack={generateGStackstream} />
               </div>
             </CardContent>
           </Card>
