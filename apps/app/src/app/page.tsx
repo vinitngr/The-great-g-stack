@@ -1,3 +1,5 @@
+"use client"
+
 import StackGenerator from "@/components/Generator";
 import { Analytics } from "@vercel/analytics/next"
 export default function Home() {
