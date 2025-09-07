@@ -20,6 +20,7 @@ import Drawer from './Drawer';
 import AdditionalServices from './AdditionalService';
 import { cn } from '@/lib/utils';
 
+
 const StackGenerator = () => {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [editingOption, setEditingOption] = useState<SelectedStackItem | null>(null);
@@ -321,6 +322,7 @@ const StackGenerator = () => {
     const prompt = getPrompt();
     const model = aboutProject.model || 'gemini-2.5-flash';
 
+    let isSuccess = false;
     try {
       const finalText = await aiResponseStream(prompt, model, (chunk) => {
         outputRef.current += chunk;
@@ -334,18 +336,31 @@ const StackGenerator = () => {
         parsed.prompt = prompt;
         setAiResult(parsed);
         setShowResults(true);
+        isSuccess = true;
       } catch {
         setErrorMessage('Failed to parse streamed JSON');
         setAiResult({ prompt });
+        isSuccess = false;
       }
     } catch (err: any) {
       clearInterval(flush);
       setGettingStream(false);
       setErrorMessage(err?.message || 'Stream error');
       setAiResult({});
+      isSuccess = false;
     } finally {
       setairesponseLoading(false);
       setShowResults(true);
+
+      await fetch(process.env.NEXT_PUBLIC_CLOUDFLARE_COUNTER_API!, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          total: 1,
+          success: isSuccess ? 1 : 0,
+          error: isSuccess ? 0 : 1
+        })
+      });
     }
   }
 
@@ -353,7 +368,7 @@ const StackGenerator = () => {
   if (gettingStream) {
     return (
       <div className='fixed top-0 bg-black left-0 w-full h-full flex flex-col justify-center items-center backdrop-blur-lg z-50'>
-        <div className='text-white/70 p-2  flex items-center justify-center gap-5 pb-3'>Ai is generating your G-stack <Loader className='animate-spin'/></div>
+        <div className='text-white/70 p-2  flex items-center justify-center gap-5 pb-3'>Ai is generating your G-stack <Loader className='animate-spin' /></div>
         <pre
           className="h-full w-1/2 p-4 text-white/30 overflow-y-scroll scrollbar-hide whitespace-pre-wrap break-words"
           ref={(el) => {
