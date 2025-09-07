@@ -352,15 +352,19 @@ const StackGenerator = () => {
       setairesponseLoading(false);
       setShowResults(true);
 
-      await fetch(process.env.NEXT_PUBLIC_CLOUDFLARE_COUNTER_API!, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          total: 1,
-          success: isSuccess ? 1 : 0,
-          error: isSuccess ? 0 : 1
-        })
-      });
+      try {
+        await fetch(process.env.NEXT_PUBLIC_CLOUDFLARE_COUNTER_API!, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            total: 1,
+            success: isSuccess ? 1 : 0,
+            error: isSuccess ? 0 : 1
+          })
+        });
+      } catch (err) {
+        console.error('Counter API failed:', err);
+      }
     }
   }
 
